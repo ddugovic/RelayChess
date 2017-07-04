@@ -1,6 +1,5 @@
 (function() {
-    var server = "http://188.166.194.141:9090";
-    //server = "http://127.0.0.1:9090";
+    var server = "http://relaychess.mooo.com:9090";
 
     var app = angular.module("relayApp");
 

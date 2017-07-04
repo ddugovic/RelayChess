@@ -6,12 +6,6 @@
         $routeProvider.when("/", {
             templateUrl: "lobby.html",
         controller: "lobbyController"
-        }).when("/login", {
-            templateUrl: "login.html",
-            controller: "loginController"
-        }).when("/register", {
-            templateUrl: "register.html",
-            controller: "loginController"
         }).when("/rules", {
             templateUrl: "rules.html",
             controller: "lobbyController"

@@ -22,13 +22,13 @@
         <link rel="stylesheet" href="styles/modal.css">
 
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
         <script src="js/angularModalService.js"></script>
         <script src="js/angular.audio.js"></script>
 
+        <script src="https://ttv-api.s3.amazonaws.com/twitch.min.js"></script>
         <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 
@@ -42,7 +42,6 @@
         <script src="js/app/config.js"></script>
         <script src="js/app/relayChessService.js"></script>
         <script src="js/app/relayAudioService.js"></script>
-        <script src="js/app/loginController.js"></script>
         <script src="js/app/lobbyController.js"></script>
         <script src="js/app/playController.js"></script>
         <script src="js/app/playAIController.js"></script>
@@ -61,58 +60,11 @@
             <div class="headMenu" ng-cloak ng-controller="headMenuController">
                 <div class="headMenuItem" ng-click="toggleMusic()" ng-class="relayAudio.musicMuted?'disabled':'enabled'"><i class="fa fa-music" aria-hidden="true"></i></div>
                 <div class="headMenuItem" ng-click="toggleSound()" ng-class="relayAudio.soundMuted?'disabled':'enabled'"><i class="fa fa-volume-up" aria-hidden="true"></i></div>
-                <div class="headMenuUsername" ng-hide="!relayChess.anonymousUser" ng-click="login()">Login</div>
-                <div class="headMenuUsername register" ng-hide="!relayChess.anonymousUser" ng-click="register()">Register</div>
+                <img src="http://ttv-api.s3.amazonaws.com/assets/connect_dark.png" class="twitch-connect" href="#" />
                 <div class="headMenuUsername" ng-hide="relayChess.anonymousUser" ng-click="showProfile()">{{relayChess.playerInfo.displayName}}</div>
                 <div class="headMenuItem enabled" ng-hide="relayChess.anonymousUser" ng-click="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i></div>
             </div>
         </div>
-
-        <!-- Login -->
-        <script type="text/ng-template" id="login.html">
-        <div class="flex-center-column center" style="position: relative;">
-            <div style="margin-top:10px; display:flex; justify-content: center;">
-                <a class="btn-menu" ng-click="navigate('lobby')">Lobby</a>
-                <a class="btn-menu" ng-click="navigate('community')">Community</a>
-                <a class="btn-menu" ng-click="navigate('rules')">Rules</a>
-                <a class="btn-menu" href="https://discord.gg/WnEnXZ9" target="_blank">Discord</a>
-            </div>
-
-            <div class="flex-block animated fadeIn" style="width: 390px; margin-bottom: 100px;">
-                <p class="login-header">Login</p>
-                <p class="login-header sub-error">{{message}}</p>
-                <form novalidate>
-                    <input class="inp-border" type="text" ng-model="user.name" placeholder="Name"/><br />
-                    <input class="inp-border" type="password" ng-model="user.password" placeholder="Password"/><br />
-                    <input type="submit" class="btn-border btn-big" style="margin-top:20px; float: left;" ng-click="tryLogin(user)" ng-disabled="requestActive" ng-class="{disabled: requestActive}" value="Login" />
-                    <input type="submit" class="btn-forgot" style="margin-top:20px; float: right;" ng-click="showRegister()" value="Don't have an account yet?" />
-                </form>
-            </div>
-        </div>
-        </script>
-
-        <!-- Register -->
-        <script type="text/ng-template" id="register.html">
-            <div style="margin-top:10px; display:flex; justify-content: center;">
-                <a class="btn-menu" ng-click="navigate('lobby')">Lobby</a>
-                <a class="btn-menu" ng-click="navigate('community')">Community</a>
-                <a class="btn-menu" ng-click="navigate('rules')">Rules</a>
-                <a class="btn-menu" href="https://discord.gg/WnEnXZ9" target="_blank">Discord</a>
-            </div>
-
-            <div class="flex-center-column center" style="position: relative;">
-                <div class="flex-block animated fadeIn" style="width: 390px; margin-bottom: 100px;">
-                    <p class="login-header">Register</p>
-                    <p class="login-header sub-error">{{message}}</p>
-                    <form novalidate>
-                        <input class="inp-border" type="text" ng-model="user.name" placeholder="Name"/><br />
-                        <input class="inp-border" type="password" ng-model="user.password" placeholder="Password"/><br />
-                        <input type="submit" class="btn-border btn-big yellow" style="margin-top:20px; float: left;" ng-click="trySignup(user)" ng-disabled="requestActive" ng-class="{disabled: requestActive}" value="Register" />
-                        <input type="submit" class="btn-forgot" style="margin-top:20px; float: right;" ng-click="showLogin()" value="Already have an account?" />
-                    </form>
-                </div>
-            </div>
-        </script>
 
         <!-- Lobby -->
         <script type="text/ng-template" id="lobby.html">
@@ -175,7 +127,7 @@
 
                 <div style="width:200px; margin-left:10px; flex:0 0 auto; display:flex; flex-direction: column;">
                     <div class="btn-border btn-big yellow" style="margin-bottom: 10px;" ng-click="openSeekDialog();">New Game</div>
-                    <div class="btn-border btn-big yellow" style="margin-bottom: 10px; display: none;" ng-click="openSeekAIDialog();">Play Computer</div>
+                    <div class="btn-border btn-big yellow" style="margin-bottom: 10px;" ng-click="openSeekAIDialog();">Play Computer</div>
                     <div class="btn-border btn-big" style="margin-bottom: 10px; display: none;" ng-click="openFriendSeekDialog();">Play with a friend</div>
                 </div>
             </div>
@@ -327,6 +279,21 @@
 
         <!-- Main View -->
         <div ng-view></div>
+<script>
+  Twitch.init({clientId: 'm0rw13fz65beojycpokkxy8f4x8rug'}, function(error, status) {
+    // the sdk is now loaded
+    if (status.authenticated) {
+      $('.twitch-connect').hide()
+    } else {
+      $('.twitch-connect').click(function() {
+        Twitch.login({
+          redirect_uri: 'http://relaychess.mooo.com/#/twitch',
+          scope: []
+        });
+      })
+    }
+  });
+</script>
     </body>
 </html>
 

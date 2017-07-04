@@ -1,31 +1,24 @@
-var crypto = require("crypto");
-
-function createUserToken(user)
+function createUserToken(user, signature)
 {
     //create token from the hash name and expire date
+    //note this isn't the secure (Twitch) token but simply a convenience
     var token = {
         name: user.name,
         displayName: user.displayName,
-        hash: crypto.createHash("sha256").update(user.passwordHash).digest("hex"),
         expire: Date.now(),
-        signature: ""
+        signature: signature // twitch token
     };
-
-    token.signature = crypto.createHash("sha256")
-    .update(token.name + token.displayName + token.hash + token.expire + "THIS IS A SECRET<>")
-    .digest("hex");
-
     return token;
 }
 
 function validateUserToken(token)
 {
     try{
-        var signature = crypto.createHash("sha256")
-        .update(token.name + token.displayName + token.hash + token.expire + "THIS IS A SECRET<>")
-        .digest("hex");
-
-        return (token.signature == signature);
+        var url = "https://api.twitch.tv/kraken?oauth_token=" + token.signature;
+        $.getJSON(url, function(data) {
+            return (token.name == data.token.user_name);
+        });
+        return false;
     }
     catch(ex)
     {

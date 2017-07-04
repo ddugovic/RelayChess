@@ -1,5 +1,3 @@
-//TODO: 2FA (authy?) to avoid collecting passwords
-var crypto = require("crypto");
 var express = require("express");
 var mongodb = require("mongodb");
 
@@ -25,124 +23,41 @@ app.use(function(req, res, next) {
 
 app.get('/', function(req, res, next) {
   // Handle the get for this route
+    console.log("GET");
 });
 
 app.post('/', function(req, res, next) {
  // Handle the post for this route
+    console.log("POST");
 });
-
-
-//sanity check our inputs
-function checkUserPasswordInput(req)
-{
-    if(!("username" in req.query) || !_.isString(req.query.username) ||
-       !(/^[0-9a-z]{3,20}$/i).test(req.query.username))
-    {
-        //username invalid
-        return false;
-    }
-
-    if(!("password" in req.query) || !_.isString(req.query.password) ||
-       !(/^.{3,20}$/).test(req.query.password))
-    {
-        //password invalid
-        return false;
-    }
-
-    return true;
-}
 
 //login
-app.get("/login", function(req, res){
+app.get("/twitch", function(req, res){
+    console.log("twitch");
     co(function*(){
-        //sanity check
-        if(!checkUserPasswordInput(req))
-        {
-            res.json({result:false, reason: "invalid request"});
-            return;
-        }
-
-        //get username & password
-        var username = req.query.username;
-        var password = req.query.password;
-
-        username = username.toLowerCase();
+        var username = null;
+        var token = req.query.token;
+        var url = "https://api.twitch.tv/kraken?oauth_token=" + token;
+        $.getJSON(url, function(data) {
+            username = data.token.user_name;
+        });
 
         //check if username exists
         var userQuery = yield data.userCollection.findOne({"name": username});
-
         if(userQuery == null)
         {
-            //no users with this name found
-            res.json({result:false, reason: "username doesn't exist"});
-            return;
+            var newUser = {
+                ip: req.connection.remoteAddress,
+                name: username,
+                displayName: username,
+                title: "",
+                rating: {r: 1500, rd: 350.0, vol: 0.06}
+            };
+            var insertResult = yield data.userCollection.insertOne(newUser);
         }
-
-        //verify password
-        var salt = userQuery.passwordSalt;
-        var hash = crypto.createHash("sha256").update(password + salt).digest("hex");
-
-        if(hash === userQuery.passwordHash)
-        {
-            //hash matches
-
-            //generate login token
-            var token = JSON.stringify(userToken.createUserToken(userQuery));
-
-            res.json({result:true, token: token});
-        }
-        else
-        {
-            //hash doesnt match
-            res.json({result:false, reason: "wrong password"});
-        }
-    });
-});
-
-//register
-app.get("/register", function(req, res){
-    co(function*(){
-        if(!checkUserPasswordInput(req))
-        {
-            res.json({result:false, reason: "invalid request"});
-            return;
-        }
-
-        //get username & password
-        var username = req.query.username.toLowerCase();
-        var displayName = req.query.username;
-        var password = req.query.password;
-
-        //check if username exists
-        var userQuery = yield data.userCollection.findOne({"name": username});
-
-        if(userQuery != null || username.startsWith("anonymous"))
-        {
-            //users with this name found
-            res.json({result:false, reason: "username already exist"});
-            return;
-        }
-
-        //salt and hash password
-        var salt = crypto.randomBytes(16).toString("hex");
-        var hash = crypto.createHash("sha256").update(password + salt).digest("hex");
-
-        var newUser = {
-            ip: req.connection.remoteAddress,
-            name: username, 
-            displayName: displayName,
-            passwordHash: hash,
-            passwordSalt: salt,
-            title: "",
-            rating: {r: 1500, rd: 350.0, vol: 0.06}
-        };
-
-        var insertResult = yield data.userCollection.insertOne(newUser);
 
         //generate login token
-        var token = JSON.stringify(userToken.createUserToken(newUser));
-
-        //done
+        var token = JSON.stringify(userToken.createUserToken(userQuery, req.query.token));
         res.json({result:true, token: token});
     });
 });

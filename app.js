@@ -10,9 +10,27 @@ var data = require("./data");
 var userToken = require("./userToken");
 var socketGameServer = require("./socketServer/socketServer");
 
+const simpleOauth = require('simple-oauth2');
+const axios = require('axios');
+
 var MongoClient = mongodb.MongoClient;
 
 var app = express();
+
+const oauth2 = simpleOauth.create({
+  client: {
+    id: config.oauth.client.id,
+    secret: config.oauth.client.secret,
+  },
+  auth: {
+    tokenHost: config.oauth.server.tokenHost,
+    authorizePath: config.oauth.server.authorizePath,
+    tokenPath: config.oauth.server.tokenPath
+  }
+});
+
+const state = Math.random().toString(36).substring(2);
+const authorizationUri = `${config.oauth.server.tokenHost}${config.oauth.server.authorizePath}?response_type=code&client_id=${config.oauth.client.id}&redirect_uri=${config.oauth.client.redirectUri}&scope=${config.oauth.scopes.join('%20')}&state=${state}`;
 
 //enable cors
 app.use(function(req, res, next) {
@@ -31,41 +49,45 @@ app.post('/', function(req, res, next) {
     console.log("POST");
 });
 
-//login
-app.get("/twitch", function(req, res){
-    console.log("twitch");
-    co(function*(){
-        var username = null;
-        var token = req.query.token;
-        var url = "https://api.twitch.tv/kraken?oauth_token=" + token;
-        $.getJSON(url, function(data) {
-            username = data.token.user_name;
-        });
-
-        //check if username exists
-        var userQuery = yield data.userCollection.findOne({"name": username});
-        if(userQuery == null)
-        {
-            var newUser = {
-                ip: req.connection.remoteAddress,
-                name: username,
-                displayName: username,
-                title: "",
-                rating: {r: 1500, rd: 350.0, vol: 0.06}
-            };
-            var insertResult = yield data.userCollection.insertOne(newUser);
-        }
-
-        //generate login token
-        var token = JSON.stringify(userToken.createUserToken(userQuery, req.query.token));
-        res.json({result:true, token: token});
-    });
+app.get('/login-with-lichess', (req, res) => {
+  console.log(authorizationUri);
+  res.redirect(authorizationUri);
 });
 
-//getUserInfo
-app.get("/getUserInfo", function(req, res){
-    console.log("getUserInfo request");
-    res.send("getUserInfo");
+// Redirect URI: parse the authorization token and ask for the access token
+app.get('/login-with-lichess/callback', async (req, res) => {
+  try {
+    const result = await oauth2.authorizationCode.getToken({
+      code: req.query.code,
+      redirect_uri: config.oauth.client.redirectUri
+    });
+    // console.log(result);
+    const token = oauth2.accessToken.create(result);
+    const lichessUser = await axios.get('/account/me', {
+      baseURL: 'https://lichess.org/',
+      headers: { 'Authorization': 'Bearer ' + token.token.access_token }
+    }).then(r => r.data);
+
+    //check if username exists
+    const dbUser = await data.userCollection.findOne({"name": lichessUser.id});
+    if(dbUser) {
+      res.send(`<h1>Success!</h1>The user already exists in DB: <pre>${JSON.stringify(dbUser)}</pre>`);
+    } else {
+        const newUser = {
+            _id: lichessUser.id,
+            ip: req.connection.remoteAddress,
+            name: lichessUser.username,
+            displayName: lichessUser.username,
+            title: "",
+            rating: {r: 1500, rd: 350.0, vol: 0.06}
+        };
+        await data.userCollection.insertOne(newUser);
+        res.send(`<h1>Success!</h1>The user has been created in DB: <pre>${JSON.stringify(newUser)}</pre>`);
+    }
+  } catch(error) {
+    console.error('Access Token Error', error.message);
+    res.status(500).json('Authentication failed');
+  }
 });
 
 //connect to db

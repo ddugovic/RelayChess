@@ -28,7 +28,6 @@
         <script src="js/angularModalService.js"></script>
         <script src="js/angular.audio.js"></script>
 
-        <script src="https://ttv-api.s3.amazonaws.com/twitch.min.js"></script>
         <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 
@@ -60,7 +59,7 @@
             <div class="headMenu" ng-cloak ng-controller="headMenuController">
                 <div class="headMenuItem" ng-click="toggleMusic()" ng-class="relayAudio.musicMuted?'disabled':'enabled'"><i class="fa fa-music" aria-hidden="true"></i></div>
                 <div class="headMenuItem" ng-click="toggleSound()" ng-class="relayAudio.soundMuted?'disabled':'enabled'"><i class="fa fa-volume-up" aria-hidden="true"></i></div>
-                <img src="http://ttv-api.s3.amazonaws.com/assets/connect_dark.png" class="twitch-connect" href="#" />
+                <a href="http://localhost:9090/login-with-lichess">Login with Lichess</a>
                 <div class="headMenuUsername" ng-hide="relayChess.anonymousUser" ng-click="showProfile()">{{relayChess.playerInfo.displayName}}</div>
                 <div class="headMenuItem enabled" ng-hide="relayChess.anonymousUser" ng-click="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i></div>
             </div>
@@ -279,21 +278,6 @@
 
         <!-- Main View -->
         <div ng-view></div>
-<script>
-  Twitch.init({clientId: 'm0rw13fz65beojycpokkxy8f4x8rug'}, function(error, status) {
-    // the sdk is now loaded
-    if (status.authenticated) {
-      $('.twitch-connect').hide()
-    } else {
-      $('.twitch-connect').click(function() {
-        Twitch.login({
-          redirect_uri: 'http://relaychess.mooo.com/#/twitch',
-          scope: []
-        });
-      })
-    }
-  });
-</script>
     </body>
 </html>
 

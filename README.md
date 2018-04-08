@@ -1,6 +1,20 @@
 # RelayChess
 The future of chess is now!
 
+# How to run
+
+Check the config in config.js. Defaults should work.
+```
+npm i
+node app.js
+```
+In another terminal:
+```
+cd html
+http-server # or `python -m SimpleHTTPServer` or any HTTP file server
+```
+Now open http://localhost:8080/index.html, you should see the homepage.
+
 # Database
 MongoDB 3.2.9
 

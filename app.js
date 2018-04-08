@@ -74,7 +74,7 @@ app.get('/login-with-lichess/callback', async (req, res) => {
     // create new session
     const newSession = {
         _id: sessionId,
-        user: lichessUser._id,
+        user: lichessUser.id,
         createdAt: new Date(),
         active: true
     };
@@ -90,7 +90,7 @@ app.get('/login-with-lichess/callback', async (req, res) => {
             ip: req.connection.remoteAddress,
             name: lichessUser.username,
             displayName: lichessUser.username,
-            title: "",
+            title: lichessUser.title || '',
             rating: {r: 1500, rd: 350.0, vol: 0.06}
         };
         await data.userCollection.insertOne(newUser);

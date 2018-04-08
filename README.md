@@ -3,7 +3,10 @@ The future of chess is now!
 
 # How to run
 
-Check the config in config.js. Defaults should work.
+```
+cp oauth.client.js.default oauth.client.js
+```
+Edit oauth.client.js with your oauth config.
 ```
 npm i
 node app.js

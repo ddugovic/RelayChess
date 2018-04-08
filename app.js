@@ -6,8 +6,8 @@ var _ = require("underscore");
 
 //app modules
 var config = require("./config");
+var oauthClient = require("./oauth.client");
 var data = require("./data");
-var userToken = require("./userToken");
 var socketGameServer = require("./socketServer/socketServer");
 
 const simpleOauth = require('simple-oauth2');
@@ -19,18 +19,18 @@ var app = express();
 
 const oauth2 = simpleOauth.create({
   client: {
-    id: config.oauth.client.id,
-    secret: config.oauth.client.secret,
+    id: oauthClient.id,
+    secret: oauthClient.secret,
   },
   auth: {
-    tokenHost: config.oauth.server.tokenHost,
-    authorizePath: config.oauth.server.authorizePath,
-    tokenPath: config.oauth.server.tokenPath
+    tokenHost: config.oauth.tokenHost,
+    authorizePath: config.oauth.authorizePath,
+    tokenPath: config.oauth.tokenPath
   }
 });
 
 const state = Math.random().toString(36).substring(2);
-const authorizationUri = `${config.oauth.server.tokenHost}${config.oauth.server.authorizePath}?response_type=code&client_id=${config.oauth.client.id}&redirect_uri=${config.oauth.client.redirectUri}&scope=${config.oauth.scopes.join('%20')}&state=${state}`;
+const authorizationUri = `${config.oauth.tokenHost}${config.oauth.authorizePath}?response_type=code&client_id=${oauthClient.id}&redirect_uri=${oauthClient.redirectUri}&scope=${config.oauth.scopes.join('%20')}&state=${state}`;
 
 //enable cors
 app.use(function(req, res, next) {
@@ -59,7 +59,7 @@ app.get('/login-with-lichess/callback', async (req, res) => {
   try {
     const result = await oauth2.authorizationCode.getToken({
       code: req.query.code,
-      redirect_uri: config.oauth.client.redirectUri
+      redirect_uri: oauthClient.redirectUri
     });
     // console.log(result);
     const token = oauth2.accessToken.create(result);

@@ -60,8 +60,6 @@ app.get('/login-with-lichess/callback', async (req, res) => {
   try {
     // generate secure-random token prior to side effects
     const sessionId = crypto.randomBytes(48).toString('base64');
-    res.cookie('id', sessionId, { httpOnly: true });
-
     const result = await oauth2.authorizationCode.getToken({
       code: req.query.code,
       redirect_uri: oauthClient.redirectUri
@@ -85,7 +83,7 @@ app.get('/login-with-lichess/callback', async (req, res) => {
     //check if username exists
     const dbUser = await data.userCollection.findOne({_id: lichessUser.id});
     if (dbUser) {
-        res.send(`<h1>Success!</h1>The user already exists in DB: <pre>${JSON.stringify(dbUser)}</pre>`);
+        //res.send(`<h1>Success!</h1>The user already exists in DB: <pre>${JSON.stringify(dbUser)}</pre>`);
     } else {
         const newUser = {
             _id: lichessUser.id,
@@ -96,8 +94,10 @@ app.get('/login-with-lichess/callback', async (req, res) => {
             rating: {r: 1500, rd: 350.0, vol: 0.06}
         };
         await data.userCollection.insertOne(newUser);
-        res.send(`<h1>Success!</h1>The user has been created in DB: <pre>${JSON.stringify(newUser)}</pre>`);
+        //res.send(`<h1>Success!</h1>The user has been created in DB: <pre>${JSON.stringify(newUser)}</pre>`);
     }
+    res.cookie('id', sessionId, { httpOnly: true });
+    res.redirect(config.baseURL);
   } catch(error) {
     console.error('Access Token Error', error.message);
     res.status(500).json('Authentication failed');

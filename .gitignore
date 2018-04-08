@@ -1,3 +1,6 @@
+# private config
+oauth.client.js
+
 # Logs
 logs
 *.log

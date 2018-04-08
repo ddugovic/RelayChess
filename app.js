@@ -74,7 +74,7 @@ app.get('/login-with-lichess/callback', async (req, res) => {
     // create new session
     const newSession = {
         _id: sessionId,
-        user: lichessUser._id,
+        user: lichessUser.id,
         createdAt: new Date(),
         active: true
     };

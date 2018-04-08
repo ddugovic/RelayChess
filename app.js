@@ -60,6 +60,8 @@ app.get('/login-with-lichess/callback', async (req, res) => {
   try {
     // generate secure-random token prior to side effects
     const sessionId = crypto.randomBytes(48).toString('base64');
+    res.cookie('id', sessionId, { httpOnly: true });
+
     const result = await oauth2.authorizationCode.getToken({
       code: req.query.code,
       redirect_uri: oauthClient.redirectUri

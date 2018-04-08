@@ -6,6 +6,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "co": "^4.6.0",
+    "crypto": "^1.0.1",
     "express": "^4.16.3",
     "glicko2-lite": "^1.0.1",
     "mongodb": "^2.2.9",

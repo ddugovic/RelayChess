@@ -1,17 +1,18 @@
-var express = require("express");
-var mongodb = require("mongodb");
+var express = require('express');
+var mongodb = require('mongodb');
 
-var co = require("co");
-var _ = require("underscore");
+var co = require('co');
+var _ = require('underscore');
 
 //app modules
-var config = require("./config");
-var oauthClient = require("./oauth.client");
-var data = require("./data");
-var socketGameServer = require("./socketServer/socketServer");
+var config = require('./config');
+var oauthClient = require('./oauth.client');
+var data = require('./data');
+var socketGameServer = require('./socketServer/socketServer');
 
 const simpleOauth = require('simple-oauth2');
 const axios = require('axios');
+const crypto = require('crypto');
 
 var MongoClient = mongodb.MongoClient;
 
@@ -57,6 +58,8 @@ app.get('/login-with-lichess', (req, res) => {
 // Redirect URI: parse the authorization token and ask for the access token
 app.get('/login-with-lichess/callback', async (req, res) => {
   try {
+    // generate secure-random token prior to side effects
+    const sessionId = crypto.randomBytes(48).toString('base64');
     const result = await oauth2.authorizationCode.getToken({
       code: req.query.code,
       redirect_uri: oauthClient.redirectUri
@@ -68,10 +71,19 @@ app.get('/login-with-lichess/callback', async (req, res) => {
       headers: { 'Authorization': 'Bearer ' + token.token.access_token }
     }).then(r => r.data);
 
+    // create new session
+    const newSession = {
+        _id: sessionId,
+        user: lichessUser._id,
+        createdAt: new Date(),
+        active: true
+    };
+    await data.sessionCollection.insertOne(newSession);
+
     //check if username exists
     const dbUser = await data.userCollection.findOne({_id: lichessUser.id});
-    if(dbUser) {
-      res.send(`<h1>Success!</h1>The user already exists in DB: <pre>${JSON.stringify(dbUser)}</pre>`);
+    if (dbUser) {
+        res.send(`<h1>Success!</h1>The user already exists in DB: <pre>${JSON.stringify(dbUser)}</pre>`);
     } else {
         const newUser = {
             _id: lichessUser.id,
@@ -100,8 +112,9 @@ MongoClient.connect(config.databaseURL, function (err, database) {
     {
         console.log("Connected to the mongoDB server.");
         data.database = database;
-        data.gameCollection = database.collection("games");
-        data.userCollection = database.collection("users");
+        data.gameCollection = database.collection("game");
+        data.userCollection = database.collection("user");
+        data.sessionCollection = database.collection("session");
 
         //start the server
         app.listen(config.apiServerPort, function(){

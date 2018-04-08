@@ -1,16 +1,13 @@
-function validateUserToken(token)
+var data = require('./data');
+
+function validateUserToken(id)
 {
-    try{
-        //var url = "https://api.twitch.tv/kraken?oauth_token=" + token.signature;
-        //$.getJSON(url, function(data) {
-        //    return (token.name == data.token.user_name);
-        //});
-        return false;
+    console.log(id);
+    if (id) {
+        if (data.sessionCollection.findOne({_id: id}))
+            return true;
     }
-    catch(ex)
-    {
-        return false;
-    }
+    return false;
 }
 
 module.exports = {

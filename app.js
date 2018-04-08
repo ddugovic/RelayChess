@@ -1,4 +1,5 @@
 var express = require('express');
+var cookieParser = require('cookie-parser');
 var mongodb = require('mongodb');
 
 var co = require('co');
@@ -17,6 +18,7 @@ const crypto = require('crypto');
 var MongoClient = mongodb.MongoClient;
 
 var app = express();
+app.use(cookieParser());
 
 const oauth2 = simpleOauth.create({
   client: {

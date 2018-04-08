@@ -71,7 +71,7 @@ module.exports = function(socket){
 
         co(function*(){
             //check token
-            if(userToken.validateUserToken(request.token))
+            if(userToken.validateUserToken(request.cookies['id']))
             {
                 //valid token
                 //find the user 

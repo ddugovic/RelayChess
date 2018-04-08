@@ -69,7 +69,7 @@ app.get('/login-with-lichess/callback', async (req, res) => {
     }).then(r => r.data);
 
     //check if username exists
-    const dbUser = await data.userCollection.findOne({"name": lichessUser.id});
+    const dbUser = await data.userCollection.findOne({_id: lichessUser.id});
     if(dbUser) {
       res.send(`<h1>Success!</h1>The user already exists in DB: <pre>${JSON.stringify(dbUser)}</pre>`);
     } else {

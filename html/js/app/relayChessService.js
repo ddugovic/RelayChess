@@ -1,5 +1,5 @@
 (function() {
-    var socketServer = "http://socket.relaychess.mooo.com:3000/";
+    var socketServer = "http://localhost:3000/";
 
     var app = angular.module("relayApp");
 

@@ -1,30 +1,6 @@
 
 /*login*/
-.login-header {
-    font-size:30px;
-
-    margin-bottom: 15px;
-
-    color: white;
-}
-
-.login-header.sub {
-    font-size:16px;
-
-    margin-top: -12px;
-    margin-bottom: 15px;
-
-    color: rgba(255, 255, 255, 0.5);
-}
-
-
-.login-header.sub-error {
-    font-size:16px;
-
-    margin-top: -12px;
-    margin-bottom: 15px;
-
-    color: rgba(255, 104, 104, 1);
+.login-lichess {
 }
 
 .inp-border {

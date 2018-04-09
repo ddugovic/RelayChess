@@ -4,148 +4,126 @@ var _ = require("underscore");
 
 //app modules
 var data = require("../data");
-var userToken = require("../userToken");
 
 var utils = require("./utils");
 
-//TODO: anonymous users
+function handleAnonymous(socket) {
+    //check if this socket is associated with a different user already
+    var serverUser = utils.getServerUserBySocket(socket);
+    if(serverUser) return;
 
-module.exports = function(socket){
-    //new login attempt
-    socket.on("login", function(request){
-        console.log("socket -> login");
+    //create temporary anonymous user
+    var anonID = utils.generateAnonID();
 
-        if(!("token" in request)){
-            //invalid request
+    //new anonymous user -> insert object
+    data.loggedInUsers[anonID] = {
+            _id: anonID,
+            name: anonID,
+            displayName: "Anonymous",
+            title: "",
+            rating: "?"
+        };
+
+    //add socket connection
+    data.loggedInUsers[anonID].sockets = [socket];
+
+    console.log(anonID + " -> new connection");
+
+    //send user update to all connected users
+    utils.emitUserUpdate(io.sockets);
+
+    //send seek list to new connection
+    utils.emitSeeksUpdate(socket);
+
+    //send active game list to new connection
+    utils.emitActiveGames(socket);
+}
+
+function handleUser(socket, user) {
+    const userId = user._id;
+
+    //check if this socket is associated with a different user already
+    var ServerUser = utils.getServerUserBySocket(socket);
+
+    if(ServerUser != null && ServerUser._id != userId)
+    {
+        //log out previous account
+        delete data.loggedInUsers[ServerUser._id];
+    }
+
+    //update / add user to online cache
+    if(userId in data.loggedInUsers)
+    {
+        if(data.loggedInUsers[userId].sockets.indexOf(socket) != -1){
+            //already have this socket stored
             return;
         }
 
-        if(request.token == "anonymous"){
-            //anonymous login request
-            
-            //check if this socket is associated with a different user already
-            var ServerUser = utils.getServerUserBySocket(socket);
+        console.log(user.name + " -> new connection");
 
-            if(ServerUser != null)
-            {
-                //ignore this
-                return;
-            }
+        //user already online -> update values
+        data.loggedInUsers[userId]._id = userId;
+        data.loggedInUsers[userId].name = user.name;
+        data.loggedInUsers[userId].title = user.title;
+        data.loggedInUsers[userId].displayName = user.displayName;
+        data.loggedInUsers[userId].rating = user.rating;
 
-            //create temporary anonymous user
-            //for the moment we won't hand out signed anonymous tokens (so the only credentials anonymous users have is the socket connection, disconnect -> loss of identity)
-            var anonID = utils.generateAnonID();
+        //add socket connection
+        data.loggedInUsers[userId].sockets.push(socket);
 
-            var anonToken = {
-                name: anonID,
-                displayName: "Anonymous"
-            };
+        //send user list to new connection
+        utils.emitUserUpdate(socket);
+    }
+    else
+    {
+        console.log(user.name + " -> connected");
+        //new user -> insert object
+        data.loggedInUsers[userId] = user;
 
-            //new anonymous user -> insert object
-            data.loggedInUsers[anonID] = {
-                    name: anonID,
-                    displayName: "Anonymous",
-                    title: "",
-                    rating: "?"
-                };
+        //add socket connection
+        data.loggedInUsers[userId].sockets = [socket];
 
-            //add socket connection
-            data.loggedInUsers[anonID].sockets = [];
-            data.loggedInUsers[anonID].sockets.push(socket);
+        //send user update to all connected users
+        utils.emitUserUpdate(io.sockets);
+    }
 
-            console.log(anonID + " -> new connection");
+    //send seek list to new connection
+    utils.emitSeeksUpdate(socket);
 
-            //send user update to all connected users
-            utils.emitUserUpdate(io.sockets);
+    //send active game list to new connection
+    utils.emitActiveGames(socket);
+}
 
-            //send temp token to anonymous user
-            socket.emit("anonToken", anonToken);
+async function handleConnect(socket) {
+    const sessionId = parseCookie(socket.handshake.headers.cookie, 'relayChessSessionId');
+    if (!sessionId) handleAnonymous(socket);
+    else {
+      const session = await data.sessionCollection.findOne({_id: sessionId, active: true});
+      if (!session) handleAnonymous(socket);
+      else {
+        const user = await data.userCollection.findOne({_id: session.user});
+        if (!user) handleAnonymous(socket);
+        else handleUser(socket, user);
+      }
+    }
+}
 
-            //send seek list to new connection
-            utils.emitSeeksUpdate(socket);
+function parseCookie(cookie, name){
+    cookie = ";"+cookie;
+    cookie = cookie.split("; ").join(";");
+    cookie = cookie.split(" =").join("=");
+    cookie = cookie.split(";"+name+"=");
+    if(cookie.length<2){
+        return null;
+    }
+    else{
+        return decodeURIComponent(cookie[1].split(";")[0]);
+    }
+}
 
-            //send active game list to new connection
-            utils.emitActiveGames(socket);
-            return;
-        }
-
-        co(function*(){
-            //check token
-            if(userToken.validateUserToken(request.cookies['id']))
-            {
-                //valid token
-                //find the user 
-                var user = yield utils.getDatabaseUserByName(request.token.name);
-                
-                if(user == null){
-                    socket.emit("logout");
-                    socket.disconnect(true);
-
-                    console.log("user not found");
-                    return;
-                }
-                
-                //check if this socket is associated with a different user already
-                var ServerUser = utils.getServerUserBySocket(socket);
-
-                if(ServerUser != null && ServerUser.name != user.name)
-                {
-                    //log out previous account
-                    delete data.loggedInUsers[ServerUser.name];
-                }
-
-                //update / add user to online cache
-                if(request.token.name in data.loggedInUsers)
-                {
-                    if(data.loggedInUsers[request.token.name].sockets.indexOf(socket) != -1){
-                        //already have this socket stored
-                        return;
-                    }
-
-                    console.log(user.name + " -> new connection");
-
-                    //user already online -> update values
-                    data.loggedInUsers[request.token.name].name = user.name;
-                    data.loggedInUsers[request.token.name].title = user.title;
-                    data.loggedInUsers[request.token.name].displayName = user.displayName;
-                    data.loggedInUsers[request.token.name].rating = user.rating;
-
-                    //add socket connection
-                    data.loggedInUsers[request.token.name].sockets.push(socket);
-
-                    //send user list to new connection
-                    utils.emitUserUpdate(socket);
-                }
-                else
-                {
-                    console.log(user.name + " -> connected");
-                    //new user -> insert object
-                    data.loggedInUsers[request.token.name] = user;
-
-                    //add socket connection
-                    data.loggedInUsers[request.token.name].sockets = [];
-                    data.loggedInUsers[request.token.name].sockets.push(socket);
-
-                    //send user update to all connected users
-                    utils.emitUserUpdate(io.sockets);
-                }
-
-                //send seek list to new connection
-                utils.emitSeeksUpdate(socket);
-
-                //send active game list to new connection
-                utils.emitActiveGames(socket);
-            }
-            else
-            {
-                //invalid token
-                socket.emit("logout");
-                socket.disconnect(true);
-
-                console.log("invalid token");
-            }
-        });
-    });
+module.exports = function(socket) {
+    
+    handleConnect(socket);
 
     //socket disconnected
     socket.on("disconnect", function(){

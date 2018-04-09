@@ -98,7 +98,7 @@ app.get('/login-with-lichess/callback', async (req, res) => {
         await data.userCollection.insertOne(newUser);
         //res.send(`<h1>Success!</h1>The user has been created in DB: <pre>${JSON.stringify(newUser)}</pre>`);
     }
-    res.cookie('id', sessionId, { httpOnly: true });
+    res.cookie('relayChessSessionId', sessionId, { httpOnly: true });
     res.redirect(config.baseURL);
   } catch(error) {
     console.error('Access Token Error', error.message);

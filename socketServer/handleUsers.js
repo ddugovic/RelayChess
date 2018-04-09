@@ -1,6 +1,7 @@
-var io = require("./socketConnection");
-var co = require("co");
-var _ = require("underscore");
+var io = require('./socketConnection');
+var co = require('co');
+var cookie = require('cookie');
+var _ = require('underscore');
 
 //app modules
 var data = require("../data");
@@ -95,7 +96,7 @@ function handleUser(socket, user) {
 }
 
 async function handleConnect(socket) {
-    const sessionId = parseCookie(socket.handshake.headers.cookie, 'relayChessSessionId');
+    const sessionId = cookie.parse(socket.handshake.headers.cookie || '').relayChessSessionId;
     if (!sessionId) handleAnonymous(socket);
     else {
       const session = await data.sessionCollection.findOne({_id: sessionId, active: true});
@@ -105,19 +106,6 @@ async function handleConnect(socket) {
         if (!user) handleAnonymous(socket);
         else handleUser(socket, user);
       }
-    }
-}
-
-function parseCookie(cookie, name){
-    cookie = ";"+cookie;
-    cookie = cookie.split("; ").join(";");
-    cookie = cookie.split(" =").join("=");
-    cookie = cookie.split(";"+name+"=");
-    if(cookie.length<2){
-        return null;
-    }
-    else{
-        return decodeURIComponent(cookie[1].split(";")[0]);
     }
 }
 

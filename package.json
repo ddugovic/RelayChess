@@ -6,6 +6,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "co": "^4.6.0",
+    "cookie": "^0.3.1",
     "cookie-parser": "^1.4.3",
     "crypto": "^1.0.1",
     "express": "^4.16.3",

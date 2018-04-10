@@ -26,13 +26,6 @@
 
         $scope.answerSeek = function(seek)
         {
-            debugger;
-            if(seek == relayChess.playerInfo.username){
-                //cancel seek
-                relayChess.socket.emit("cancelSeek");
-                return;
-            }
-
             relayChess.socket.emit("answerSeek", {seek: seek});
         };
 

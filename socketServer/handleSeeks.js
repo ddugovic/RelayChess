@@ -57,25 +57,6 @@ module.exports = function(socket){
         utils.emitSeeksUpdate(io.sockets);
     });
 
-    //player canceled seek
-    socket.on("cancelSeek", function(){
-        console.log("socket -> cancelSeek");
-        
-        var user = utils.getServerUserBySocket(socket);
-        
-        if(!user){
-            //invalid user
-            return;    
-        }
-
-        if(user.name in data.gameSeeks){
-            delete data.gameSeeks[user.name];
-
-            //push updated seeks to all players
-            utils.emitSeeksUpdate(io.sockets);
-        }
-    });
-
     //player answered seek
     socket.on("answerSeek", function(request){
         console.log("socket -> answerSeek");
@@ -92,31 +73,29 @@ module.exports = function(socket){
             return;    
         }
 
-        if(user.name == request.seek){
-            //can't join your own seek
-            return;
-        }
-
         if(request.seek in data.gameSeeks){
 
-            //check if other player is still online
-            if(!(request.seek in data.loggedInUsers))
-            {
-                //player went offline cancel seek
-                delete data.gameSeeks[request.seek];
-
-                //push updated seeks to all players
-                utils.emitSeeksUpdate(io.sockets);
-
-                return;
-            }
-
             //anonymous users can only join unrated games
-            if(user.name.startsWith("anonymous") && data.gameSeeks[request.seek].rated)
-            {
+            if(user.name.startsWith("anonymous") && data.gameSeeks[request.seek].rated){
                 return;
             }
-            
+
+            //delete the requested seek
+            delete data.gameSeeks[request.seek];
+
+            //push updated seeks to all players
+            utils.emitSeeksUpdate(io.sockets);
+
+            //can't join your own seek
+            if(user.name == request.seek){
+                return;
+            }
+
+            //check if other player is still online
+            if(!(request.seek in data.loggedInUsers)){
+                return;
+            }
+
             //create new game
             var newGame = game.CreateGameRandom(
                 request.seek, 
@@ -132,20 +111,17 @@ module.exports = function(socket){
             data.loggedInUsers[request.seek].sockets[0]
             .emit("joinGame", {id: newGame.id, orientation: newGame.getColorForUsername(request.seek)});
 
-            //delete the requested seek
-            delete data.gameSeeks[request.seek];
-
             //remove potential seek of answering players
             if(user.name in data.gameSeeks){
                 delete data.gameSeeks[user.name];
-            }
 
-            //push updated seeks to all players
-            utils.emitSeeksUpdate(io.sockets);
+                //push updated seeks to all players
+                utils.emitSeeksUpdate(io.sockets);
+            }
 
             //push active games to all users
             utils.emitActiveGames(io.sockets);
         }
-        
+
     });
 };

@@ -119,6 +119,8 @@ function game(white, black, time, increment, rated){
 }
 
 game.CreateGame = function(white, black, time, increment, rated){
+    console.log("createGame " + white + " " + black + " " + time + "+" + increment + " " + rated);
+
     //TODO: sanity check time, increment? 
     var newGame = new game(white, black, time, increment, rated);
 

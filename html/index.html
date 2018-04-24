@@ -89,7 +89,7 @@
                 <div style="width:500px; flex:0 0 auto;">
                     <div class="panel" style="min-height: 400px;">
                         <div style="margin-top: 10px;">{{relayChess.seeks.length}} Seek{{relayChess.seeks.length!=1?"s":""}}</div>
-                        <div class="seek-base" ng-repeat="seek in relayChess.seeks" ng-class-odd="'odd'" ng-click="answerSeek(seek.name)" ng-class="{'self':(seek.name == relayChess.playerInfo.username)}">
+                        <div class="seek-base" ng-repeat="seek in relayChess.seeks" ng-class-odd="'odd'" ng-click="answerSeek(seek.id)" ng-class="{'self':(seek.name == relayChess.playerInfo.username)}">
                             <div style="display:flex; margin-left: 10px; margin-right: 10px;">
                                 <div style="flex:0 0 auto; width: 30%; text-align: left;">
                                     <div style="display:inline-block; color: #d5ac34;">{{seek.title}}</div>

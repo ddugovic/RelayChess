@@ -60,7 +60,7 @@ function handleUser(socket, user) {
             return;
         }
 
-        console.log(user.name + " -> new connection");
+        console.log(userId + " -> new connection");
 
         //user already online -> update values
         data.loggedInUsers[userId]._id = userId;
@@ -77,7 +77,7 @@ function handleUser(socket, user) {
     }
     else
     {
-        console.log(user.name + " -> connected");
+        console.log(userId + " -> connected");
         //new user -> insert object
         data.loggedInUsers[userId] = user;
 

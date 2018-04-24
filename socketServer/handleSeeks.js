@@ -44,7 +44,7 @@ module.exports = function(socket){
             return;
         }
 
-        data.gameSeeks[user.name] = {
+        data.gameSeeks[user._id] = {
             user: user,
             time: request.time, 
             increment: request.inc,
@@ -66,7 +66,7 @@ module.exports = function(socket){
             return;
         }
         
-        const name = request.seek;
+        const id = request.seek;
 
         var user = utils.getServerUserBySocket(socket);
         
@@ -75,30 +75,31 @@ module.exports = function(socket){
             return;    
         }
 
-        if(name in data.gameSeeks){
+        if(id in data.gameSeeks){
 
             //anonymous users can only join unrated games
-            if(user.name.startsWith("anonymous") && data.gameSeeks[name].rated){
+            if(user.name.startsWith("anonymous") && data.gameSeeks[id].rated){
                 return;
             }
 
-            const time = data.gameSeeks[name].time;
-            const increment = data.gameSeeks[name].increment;
-            const rated = data.gameSeeks[name].rated;
+            const name = data.gameSeeks[id].user.name;
+            const time = data.gameSeeks[id].time;
+            const increment = data.gameSeeks[id].increment;
+            const rated = data.gameSeeks[id].rated;
 
             //delete the requested seek
-            delete data.gameSeeks[name];
+            delete data.gameSeeks[id];
 
             //push updated seeks to all players
             utils.emitSeeksUpdate(io.sockets);
 
             //can't join your own seek
-            if(name == user.name){
+            if(id == user._id){
                 return;
             }
 
             //check if other player is still online
-            if(!(name in data.loggedInUsers)){
+            if(!(id in data.loggedInUsers)){
                 return;
             }
 
@@ -114,12 +115,12 @@ module.exports = function(socket){
             socket
             .emit("joinGame", {id: newGame.id, orientation: newGame.getColorForUsername(user.name)});
             
-            data.loggedInUsers[name].sockets[0]
+            data.loggedInUsers[id].sockets[0]
             .emit("joinGame", {id: newGame.id, orientation: newGame.getColorForUsername(name)});
 
             //remove potential seek of answering player
-            if(user.name in data.gameSeeks){
-                delete data.gameSeeks[user.name];
+            if(user._id in data.gameSeeks){
+                delete data.gameSeeks[user._id];
 
                 //push updated seeks to all players
                 utils.emitSeeksUpdate(io.sockets);

@@ -105,17 +105,18 @@ utils.emitSeeksUpdate = function(socket)
 {
     var publicSeeks = [];
 
-    for(seek in data.gameSeeks){
-        var seek_ = data.gameSeeks[seek];
+    for(id in data.gameSeeks){
+        var seek = data.gameSeeks[id];
 
         publicSeeks.push({
-            name: seek_.user.name,
-            title: seek_.user.title,
-            displayName: seek_.user.displayName,
-            rating: seek_.user.rating,
-            time: seek_.time,
-            increment: seek_.increment,
-            rated: seek_.rated
+            id: id,
+            name: seek.user.name,
+            title: seek.user.title,
+            displayName: seek.user.displayName,
+            rating: seek.user.rating,
+            time: seek.time,
+            increment: seek.increment,
+            rated: seek.rated
         });
     }
 

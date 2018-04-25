@@ -105,18 +105,18 @@ module.exports = function(socket){
 
             //create new game
             var newGame = game.CreateGameRandom(
-                name, 
-                user.name, 
+                data.loggedInUsers[id], 
+                user, 
                 time, 
                 increment,
                 rated);
 
             //invite players to game
             socket
-            .emit("joinGame", {id: newGame.id, orientation: newGame.getColorForUsername(user.name)});
+            .emit("joinGame", {id: newGame.id, orientation: newGame.getColorForUser(user._id)});
             
             data.loggedInUsers[id].sockets[0]
-            .emit("joinGame", {id: newGame.id, orientation: newGame.getColorForUsername(name)});
+            .emit("joinGame", {id: newGame.id, orientation: newGame.getColorForUser(id)});
 
             //remove potential seek of answering player
             if(user._id in data.gameSeeks){

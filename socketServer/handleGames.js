@@ -108,8 +108,8 @@ module.exports = function(socket){
             co(function*(){
                 if(game.rated){
                     //update player ratings
-                    var playerWhite = yield data.userCollection.findOne({name: game.white.name});
-                    var playerBlack = yield data.userCollection.findOne({name: game.black.name});
+                    var playerWhite = yield data.userCollection.findOne({_id: game.white._id});
+                    var playerBlack = yield data.userCollection.findOne({_id: game.black._id});
 
                     var ratingWhite = playerWhite.rating;
                     var ratingBlack = playerBlack.rating;
@@ -124,18 +124,18 @@ module.exports = function(socket){
                     };
 
                     //update user db 
-                    yield data.userCollection.update({name:playerWhite.name}, {$set:{rating:adjustedRatings.white}});
-                    yield data.userCollection.update({name:playerBlack.name}, {$set:{rating:adjustedRatings.black}});
+                    yield data.userCollection.update({_id:playerWhite._id}, {$set:{rating:adjustedRatings.white}});
+                    yield data.userCollection.update({_id:playerBlack._id}, {$set:{rating:adjustedRatings.black}});
 
                     result.preRatings = { white: ratingWhite, black: ratingBlack };
                     result.ratings = adjustedRatings;
 
                     //update server users
-                    if(playerWhite.name in data.loggedInUsers)
-                        data.loggedInUsers[playerWhite.name].rating = adjustedRatings.white;
+                    if(playerWhite._id in data.loggedInUsers)
+                        data.loggedInUsers[playerWhite._id].rating = adjustedRatings.white;
 
-                    if(playerBlack.name in data.loggedInUsers)
-                        data.loggedInUsers[playerBlack.name].rating = adjustedRatings.black;
+                    if(playerBlack._id in data.loggedInUsers)
+                        data.loggedInUsers[playerBlack._id].rating = adjustedRatings.black;
 
                     //send updated player rating to all users
                     utils.emitUserUpdate(io.sockets);
@@ -199,19 +199,19 @@ module.exports = function(socket){
 
         co(function*(){
             //get player details from db
-            var whitePlayer = yield utils.getDatabaseUserByName(game.white.name);
-            var blackPlayer = yield utils.getDatabaseUserByName(game.black.name);
+            var whitePlayer = yield utils.getDatabaseUserById(game.white._id);
+            var blackPlayer = yield utils.getDatabaseUserById(game.black._id);
 
             var updatedTime = game.getAdjustedPlayerTime();
 
             //check if player is playing or spectating
-            var color = game.getColorForUsername(user.name);
+            var color = game.getColorForUser(user._id);
 
             if(!color){
                 //user not playing in this game
                 //add user as a spectator and reference their socket
                 //currently it is not possible to un-spectate
-                game.spectators[user.name] = socket;
+                game.spectators[user._id] = socket;
 
                 socket.emit("setupGame", {
                     id: game.id,
@@ -319,7 +319,7 @@ module.exports = function(socket){
             return;
         }
 
-        var color = game.getColorForUsername(user.name);
+        var color = game.getColorForUser(user._id);
 
         if(!color){
             //user not playing in this game
@@ -454,7 +454,7 @@ module.exports = function(socket){
             return;
         }
 
-        var color = game.getColorForUsername(user.name);
+        var color = game.getColorForUser(user._id);
 
         if(!color){
             //user not playing in this game
@@ -497,7 +497,7 @@ module.exports = function(socket){
             return;
         }
 
-        var color = game.getColorForUsername(user.name);
+        var color = game.getColorForUser(user._id);
 
         if(!color){
             //user not playing in this game

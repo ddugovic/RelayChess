@@ -129,19 +129,19 @@ module.exports = function(socket) {
             user.sockets.splice(socketIndex,1);
 
             if(user.sockets.length == 0){
-                console.log(user.name + " -> disconnected");
+                console.log(user._id + " -> disconnected");
 
                 //removed last connection to user
                 //remove all seeks from user
-                if(user.name in data.gameSeeks){
-                    delete data.gameSeeks[user.name];
+                if(user._id in data.gameSeeks){
+                    delete data.gameSeeks[user._id];
 
                     //push updated seeks to all players
                     utils.emitSeeksUpdate(io.sockets);
                 }
 
                 //remove from online array
-                delete data.loggedInUsers[user.name];
+                delete data.loggedInUsers[user._id];
 
                 //send user update to all connected users
                 utils.emitUserUpdate(io.sockets);

@@ -8,6 +8,13 @@ var userToken = require("../userToken");
 
 function utils(){ }
 
+utils.getDatabaseUserById = function(id)
+{
+    var user = data.userCollection.findOne({_id: id}, {name:1, displayName:1, title:1, rating:1});
+
+    return user;
+};
+
 utils.getDatabaseUserByName = function(name)
 {
     //TODO: something better
@@ -28,9 +35,9 @@ utils.getDatabaseUserByName = function(name)
 
 utils.getServerUserBySocket = function(socket)
 {
-    for(var username in data.loggedInUsers)
+    for(var userId in data.loggedInUsers)
     {
-        var user = data.loggedInUsers[username];
+        var user = data.loggedInUsers[userId];
 
         if(user.sockets.indexOf(socket) != -1)
         {
@@ -87,10 +94,11 @@ utils.emitUserUpdate = function(socket)
     var publicUsers = [];
 
     //remove private fields
-    for(var username in data.loggedInUsers){
-        var user = data.loggedInUsers[username];
+    for(var userId in data.loggedInUsers){
+        var user = data.loggedInUsers[userId];
 
         publicUsers.push({
+            id: userId,
             name: user.name,
             title: user.title,
             displayName: user.displayName,

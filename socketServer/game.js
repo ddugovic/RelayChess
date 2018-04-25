@@ -80,12 +80,12 @@ function game(white, black, time, increment, rated){
         return this.white.ready && this.black.ready;
     };
 
-    this.getColorForUsername = function(username){
-        if(this.white.name == username){
+    this.getColorForUser = function(userId){
+        if(this.white._id == userId){
             return "w";
         }
 
-        if(this.black.name == username){
+        if(this.black._id == userId){
             return "b";
         }
 

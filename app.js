@@ -68,7 +68,7 @@ app.get('/login-with-lichess/callback', async (req, res) => {
     });
     // console.log(result);
     const token = oauth2.accessToken.create(result);
-    const lichessUser = await axios.get('/account/me', {
+    const lichessUser = await axios.get('/api/account', {
       baseURL: 'https://lichess.org/',
       headers: { 'Authorization': 'Bearer ' + token.token.access_token }
     }).then(r => r.data);

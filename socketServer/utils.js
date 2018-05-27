@@ -12,13 +12,8 @@ utils.getDatabaseUserById = function(id)
 {
     var user = data.userCollection.findOne({_id: id}, {name:1, displayName:1, title:1, rating:1});
 
-    return user;
-};
-
-utils.getDatabaseUserByName = function(name)
-{
     //TODO: something better
-    if(name.startsWith("anonymous")){
+    if(user == null){
         //return pseudo user "anonymous"
         return {
             name: name,
@@ -27,8 +22,6 @@ utils.getDatabaseUserByName = function(name)
             rating: "?"
         };
     }
-
-    var user = data.userCollection.findOne({name: name}, {name:1, displayName:1, title:1, rating:1});
 
     return user;
 };
@@ -140,18 +133,20 @@ utils.emitActiveGames = function(socket)
             var game_ = data.activeGames[game];
 
             //get players from db
-            var whitePlayer = yield utils.getDatabaseUserByName(game_.white.name);
-            var blackPlayer = yield utils.getDatabaseUserByName(game_.black.name);
+            var whitePlayer = game_.white.name; // ???
+            var blackPlayer = game_.black.name; // ???
 
             publicGames.push({
                 id : game_.id,
                 white: {
+                    _id: whitePlayer._id,
                     name: whitePlayer.name,
                     title: whitePlayer.title,
                     displayName: whitePlayer.displayName,
                     rating: whitePlayer.rating
                 },
                 black: {
+                    _id: blackPlayer._id,
                     name: blackPlayer.name,
                     title: blackPlayer.title,
                     displayName: blackPlayer.displayName,

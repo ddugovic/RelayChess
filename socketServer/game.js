@@ -14,7 +14,8 @@ function game(white, black, time, increment, rated){
     this.rated = rated;
 
     this.white = {
-            name: white,
+            _id: white._id,
+            name: white.name,
             socket: null,
             ready: false,
             time: time,
@@ -22,7 +23,8 @@ function game(white, black, time, increment, rated){
         };
 
     this.black = {
-            name: black,
+            _id: black._id,
+            name: black.name,
             socket: null,
             ready: false,
             time: time,

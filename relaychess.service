@@ -1,13 +1,13 @@
 [Unit]
 Description=Job that runs the relaychess daemon
 Documentation=man:relaychess(1)
-After=syslog.target network.target mongodb.service
+After=syslog.target network-online.target mongodb.service
 
 [Service]
 Type=simple
-User=lila
-Group=lila
-ExecStart=/usr/bin/node /home/lila/relay/app.js
+User=relay
+Group=relay
+ExecStart=/usr/bin/node /home/relay/RelayChess/app.js
 Restart=always
 
 [Install]

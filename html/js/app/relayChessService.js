@@ -64,7 +64,7 @@
             console.log("socket -> logout");
 
             $rootScope.$apply(function() {
-                $cookies.put('userToken', '');
+                $cookies.remove('userToken');
 
                 //wait for digest cycle
                 $timeout(function () {

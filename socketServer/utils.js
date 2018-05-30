@@ -119,8 +119,8 @@ utils.emitActiveGames = function(socket)
             var game_ = data.activeGames[game];
 
             //get players from db
-            var whitePlayer = game_.white.name; // ???
-            var blackPlayer = game_.black.name; // ???
+            var whitePlayer = game_.white; // ???
+            var blackPlayer = game_.black; // ???
 
             publicGames.push({
                 id : game_.id,

@@ -3,7 +3,7 @@
 
     var app = angular.module("relayApp");
 
-    app.factory("relayChess", function ($rootScope, $window, $timeout, $location, $localStorage) {
+    app.factory("relayChess", function ($rootScope, $window, $timeout, $location, $localStorage, $cookies) {
         var data = {
             loggedIn: false,
             anonymousUser: true,
@@ -17,16 +17,16 @@
             activeGames: []
         };
 
-        console.log($localStorage.userToken);
+        console.log($cookies.getAll());
 
         var socket = io.connect(socketServer);
 
         data.socket = socket;
 
         //update user info
-        if($localStorage.userToken != undefined && $localStorage.userToken != null)
+        if($cookies.get(userToken) != undefined && $cookies.get(userToken) != null)
         {
-            var userToken = JSON.parse($localStorage.userToken);
+            var userToken = JSON.parse($cookies.get(userToken));
 
             data.playerInfo.username = userToken.name;
             data.playerInfo.displayName = userToken.displayName;
@@ -41,7 +41,7 @@
             }
 
             //login as anonymous if we don't have a token
-            if($localStorage.userToken == undefined || $localStorage.userToken == null)
+            if($cookies.get(userToken) == undefined || $cookies.get(userToken) == null)
             {
                 //try login as new anonymous user
                 data.socket.emit("login", {token: "anonymous"});
@@ -50,7 +50,7 @@
                 return;
             }
 
-            var userToken = JSON.parse($localStorage.userToken);
+            var userToken = JSON.parse($cookies.get(userToken));
 
             //check token
             data.socket.emit("login", {token: userToken});
@@ -64,7 +64,7 @@
             console.log("socket -> logout");
 
             $rootScope.$apply(function() {
-                delete $localStorage.userToken;
+                $cookies.remove('userToken');
 
                 //wait for digest cycle
                 $timeout(function () {

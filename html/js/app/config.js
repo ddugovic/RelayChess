@@ -1,5 +1,5 @@
 (function() {
-    var app = angular.module("relayApp", ["ngRoute", "ngStorage", "angularModalService", "ngAudio"]);
+    var app = angular.module("relayApp", ["ngRoute", "ngStorage", "angularModalService", "ngAudio", "ngCookies"]);
 
     //config our routes
     app.config(function ($routeProvider) {

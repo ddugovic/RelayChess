@@ -25,6 +25,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-cookies.js"></script>
         <script src="js/angularModalService.js"></script>
         <script src="js/angular.audio.js"></script>
 
@@ -59,7 +60,7 @@
             <div class="headMenu" ng-cloak ng-controller="headMenuController">
                 <div class="headMenuItem" ng-click="toggleMusic()" ng-class="relayAudio.musicMuted?'disabled':'enabled'"><i class="fa fa-music" aria-hidden="true"></i></div>
                 <div class="headMenuItem" ng-click="toggleSound()" ng-class="relayAudio.soundMuted?'disabled':'enabled'"><i class="fa fa-volume-up" aria-hidden="true"></i></div>
-                <a class="login-lichess btn-border btn-big yellow" href="http://localhost:9090/login-with-lichess">Login with Lichess</a>
+                <a class="login-lichess btn-border btn-big yellow" ng-hide="relayChess.loggedIn" href="http://localhost:9090/login-with-lichess">Login with Lichess</a>
                 <div class="headMenuUsername" ng-hide="relayChess.anonymousUser" ng-click="showProfile()">{{relayChess.playerInfo.displayName}}</div>
                 <div class="headMenuItem enabled" ng-hide="relayChess.anonymousUser" ng-click="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i></div>
             </div>

@@ -59,7 +59,7 @@
             <div class="headMenu" ng-cloak ng-controller="headMenuController">
                 <div class="headMenuItem" ng-click="toggleMusic()" ng-class="relayAudio.musicMuted?'disabled':'enabled'"><i class="fa fa-music" aria-hidden="true"></i></div>
                 <div class="headMenuItem" ng-click="toggleSound()" ng-class="relayAudio.soundMuted?'disabled':'enabled'"><i class="fa fa-volume-up" aria-hidden="true"></i></div>
-                <a class="login-lichess btn-border btn-big yellow" href="http://localhost:9090/login-with-lichess">Login with Lichess</a>
+                <a class="login-lichess btn-border btn-big yellow" href="http://localhost:9090/login-with-lichess" ng-hide="relayChess.loggedIn">Login with Lichess</a>
                 <div class="headMenuUsername" ng-hide="relayChess.anonymousUser" ng-click="showProfile()">{{relayChess.playerInfo.displayName}}</div>
                 <div class="headMenuItem enabled" ng-hide="relayChess.anonymousUser" ng-click="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i></div>
             </div>

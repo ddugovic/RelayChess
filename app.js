@@ -52,11 +52,11 @@ app.post('/', function(req, res, next) {
     console.log("POST");
 });
 
-app.get('/logout', async (req, res) => {
+app.get('/logout', (req, res) => {
     console.log("Logout requested: " + req.cookies.relayChessSessionId);
     const session = req.cookies.relayChessSessionId;
     res.cookie('relayChessSessionId', '', { httpOnly: true });
-    await data.sessionCollection.deleteOne({_id: session});
+    data.sessionCollection.update({_id: session}, {active: false});
     res.redirect(config.baseURL);
 });
 

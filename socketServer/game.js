@@ -16,6 +16,7 @@ function game(white, black, time, increment, rated){
     this.white = {
             _id: white._id,
             name: white.name,
+            rating: white.rating,
             socket: null,
             ready: false,
             time: time,
@@ -25,6 +26,7 @@ function game(white, black, time, increment, rated){
     this.black = {
             _id: black._id,
             name: black.name,
+            rating: black.rating,
             socket: null,
             ready: false,
             time: time,

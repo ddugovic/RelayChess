@@ -199,8 +199,8 @@ module.exports = function(socket){
 
         co(function*(){
             //get player details from db
-            var whitePlayer = yield utils.getDatabaseUserById(game.white._id);
-            var blackPlayer = yield utils.getDatabaseUserById(game.black._id);
+            var whitePlayer = game.white;
+            var blackPlayer = game.black;
 
             var updatedTime = game.getAdjustedPlayerTime();
 
@@ -221,13 +221,13 @@ module.exports = function(socket){
                     timing: game.timing,
                     white: {
                         title: whitePlayer.title,
-                        displayName: whitePlayer.displayName,
+                        displayName: whitePlayer.name,
                         rating: whitePlayer.rating,
                         time: updatedTime.white
                     },
                     black: {
                         title: blackPlayer.title,
-                        displayName: blackPlayer.displayName,
+                        displayName: blackPlayer.name,
                         rating: blackPlayer.rating,
                         time: updatedTime.black
                     }
@@ -246,13 +246,13 @@ module.exports = function(socket){
                 timing: game.timing,
                 white: {
                     title: whitePlayer.title,
-                    displayName: whitePlayer.displayName,
+                    displayName: whitePlayer.name,
                     rating: whitePlayer.rating,
                     time: updatedTime.white
                 },
                 black: {
                     title: blackPlayer.title,
-                    displayName: blackPlayer.displayName,
+                    displayName: blackPlayer.name,
                     rating: blackPlayer.rating,
                     time: updatedTime.black
                 }

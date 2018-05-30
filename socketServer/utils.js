@@ -8,24 +8,6 @@ var userToken = require("../userToken");
 
 function utils(){ }
 
-utils.getDatabaseUserById = function(id)
-{
-    var user = data.userCollection.findOne({_id: id}, {name:1, displayName:1, title:1, rating:1});
-
-    //TODO: something better
-    if(user == null){
-        //return pseudo user "anonymous"
-        return {
-            name: name,
-            title: "",
-            displayName: "Anonymous",
-            rating: "?"
-        };
-    }
-
-    return user;
-};
-
 utils.getServerUserBySocket = function(socket)
 {
     for(var userId in data.loggedInUsers)

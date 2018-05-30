@@ -17,7 +17,7 @@
             activeGames: []
         };
 
-        console.log($localStorage.userToken)
+        console.log($localStorage.userToken);
 
         var socket = io.connect(socketServer);
 

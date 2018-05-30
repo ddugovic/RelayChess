@@ -88,6 +88,9 @@ function handleUser(socket, user) {
         utils.emitUserUpdate(io.sockets);
     }
 
+    // send the user their id and displayname
+    utils.emitUserId(socket, user);
+
     //send seek list to new connection
     utils.emitSeeksUpdate(socket);
 

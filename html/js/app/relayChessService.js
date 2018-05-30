@@ -73,6 +73,17 @@
             });
         });
 
+        socket.on("userId", function(response) {
+            console.log("socket -> userId");
+
+            $rootScope.$apply(function() {
+                data.playerInfo.username = response.username;
+                data.playerInfo.displayName = response.displayName;
+                data.loggedIn = true;
+                data.anonymousUser = false;
+            });
+        });
+
         socket.on("userUpdate", function(response){
             //store online users
             console.log("socket -> userUpdate");

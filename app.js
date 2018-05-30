@@ -52,6 +52,14 @@ app.post('/', function(req, res, next) {
     console.log("POST");
 });
 
+app.get('/logout', async (req, res) => {
+    console.log("Logout requested: " + req.cookies.relayChessSessionId);
+    const session = req.cookies.relayChessSessionId;
+    res.cookie('relayChessSessionId', '', { httpOnly: true });
+    await data.sessionCollection.deleteOne({_id: session});
+    res.redirect(config.baseURL);
+});
+
 app.get('/login-with-lichess', (req, res) => {
   console.log(authorizationUri);
   res.redirect(authorizationUri);
@@ -118,7 +126,10 @@ MongoClient.connect(config.databaseURL, function (err, database) {
         data.database = database;
         data.gameCollection = database.collection("game");
         data.userCollection = database.collection("user");
+
+        // configure session management TTL
         data.sessionCollection = database.collection("session");
+        data.sessionCollection.createIndex({"createdAt": 1 }, {expireAfterSeconds: 60 * 60 * 24 * 14});
 
         //start the server
         app.listen(config.apiServerPort, function(){

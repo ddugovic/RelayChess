@@ -20,8 +20,7 @@ utils.getServerUserBySocket = function(socket)
         }
     }
 
-    return null;
-};
+    return null; };
 
 utils.generateGameID = function()
 {
@@ -62,6 +61,11 @@ utils.generateAnonID = function()
 
     return "anonymous-" + id;
 };
+
+utils.emitUserId = function(socket, user)
+{
+    socket.emit("userId", {username: user._id, displayName: user.name});
+}
 
 utils.emitUserUpdate = function(socket)
 {

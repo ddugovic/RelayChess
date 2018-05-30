@@ -52,6 +52,14 @@ app.post('/', function(req, res, next) {
     console.log("POST");
 });
 
+app.get('/logout', async (req, res) => {
+    console.log("Logout requested: " + req.cookies.relayChessSessionId);
+    const session = req.cookies.relayChessSessionId;
+    res.cookie('relayChessSessionId', '', { httpOnly: true });
+    await data.sessionCollection.deleteOne({_id: session});
+    res.redirect(config.baseURL);
+});
+
 app.get('/login-with-lichess', (req, res) => {
   console.log(authorizationUri);
   res.redirect(authorizationUri);

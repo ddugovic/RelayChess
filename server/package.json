@@ -1,8 +1,8 @@
 {
   "name": "relaychess",
   "version": "0.9.0",
-  "description": "Relay Chess game server",
-  "main": "app.js",
+  "description": "Relay Chess server",
+  "main": "src/app.js",
   "dependencies": {
     "axios": "^0.18.0",
     "co": "^4.6.0",
@@ -18,16 +18,12 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/app.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ddugovic/RelayChess.git"
   },
-  "keywords": [
-    "relay",
-    "chess"
-  ],
   "author": "HighTides and Daniel Dugovic",
   "license": "MIT",
   "bugs": {

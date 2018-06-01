@@ -43,7 +43,7 @@ function stockfishWorker(opts, name) {
 
     var reboot = function() {
         if (instance) instance.terminate();
-        instance = new Worker('js/stockfish.js');
+        instance = new Worker('stockfish.js');
         busy = false;
         stopping = false;
         var uciVariant = opts.variant;

@@ -6,7 +6,7 @@ var _ = require("underscore");
 var data = require("../data");
 var utils = require("./utils");
 
-var chess = require("../chess");
+var chess = require("../lib/chess");
 
 //chess game class
 function game(white, black, time, increment, rated){

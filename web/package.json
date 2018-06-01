@@ -1,0 +1,13 @@
+{
+  "name": "relaychess-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "lite-server": "^2.3.0"
+  },
+  "scripts": {
+    "dev": "lite-server -c configs/browsersync-config.json"
+  },
+  "proxy": "http://localhost:8080"
+}

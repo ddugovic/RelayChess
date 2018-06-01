@@ -1,5 +1,5 @@
 # private config
-server/oauth.client.js
+server/src/oauth.client.js
 
 # Logs
 logs

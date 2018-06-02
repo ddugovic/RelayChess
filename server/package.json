@@ -1,0 +1,26 @@
+{
+  "name": "relaychess-server",
+  "version": "1.0.0",
+  "description": "Backend for RelayChess",
+  "private": true,
+  "main": "src/app.js",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "co": "^4.6.0",
+    "cookie": "^0.3.1",
+    "cookie-parser": "^1.4.3",
+    "crypto": "^1.0.1",
+    "express": "^4.16.3",
+    "glicko2-lite": "^1.0.1",
+    "mongodb": "^2.2.9",
+    "simple-oauth2": "^1.5.2",
+    "socket.io": "^1.4.8",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "prestart": "mongod --dbpath data --fork --logpath /dev/null",
+    "start": "node src/app.js",
+    "poststop": "mongo --shutdown > /dev/null"
+  }
+}

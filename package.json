@@ -1,37 +1,29 @@
 {
   "name": "relaychess",
-  "version": "0.9.0",
-  "description": "Relay Chess game server",
-  "main": "app.js",
-  "dependencies": {
-    "axios": "^0.18.0",
-    "co": "^4.6.0",
-    "cookie": "^0.3.1",
-    "cookie-parser": "^1.4.3",
-    "crypto": "^1.0.1",
-    "express": "^4.16.3",
-    "glicko2-lite": "^1.0.1",
-    "mongodb": "^2.2.9",
-    "simple-oauth2": "^1.5.2",
-    "socket.io": "^1.4.8",
-    "underscore": "^1.8.3"
+  "version": "1.0.0",
+  "private": true,
+  "description": "RelayChess frontend & backend",
+  "author": "Daniel Dugovic and HighTides",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ddugovic/RelayChess/issues"
   },
-  "devDependencies": {},
+  "homepage": "https://github.com/ddugovic/RelayChess#README",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev:web": "cd web && npm run dev",
+    "dev:server": "cd server && npm start",
+    "dev": "run-p dev:web dev:server"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ddugovic/RelayChess.git"
   },
   "keywords": [
-    "relay",
-    "chess"
+    "relaychess",
+    "chess",
+    "chessvariant"
   ],
-  "author": "HighTides and Daniel Dugovic",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ddugovic/RelayChess/issues"
-  },
-  "homepage": "https://github.com/ddugovic/RelayChess#readme"
+  "devDependencies": {
+    "npm-run-all": "^4.1.3"
+  }
 }

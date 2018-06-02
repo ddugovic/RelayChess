@@ -2,21 +2,21 @@
 Unleash the madness! Pieces (not pawns) inherit movement powers when protected.
 
 # How to run
-
+First, copy the oauth config into the appropriate place:
 ```
+cd server/src/
 cp oauth.client.js.default oauth.client.js
 ```
-Edit oauth.client.js with your oauth config.
+Then, edit oauth.client.js with your lichess oauth config. You can find out
+how to generate the necessary oauth tokens [here](https://lichess.org/account/oauth/app).
+
+Now, run:
 ```
-npm i
-node app.js
+npm run dev
 ```
-In another terminal:
-```
-cd html
-http-server # or `python -m SimpleHTTPServer` or any HTTP file server
-```
-Now open http://localhost:8080/index.html, you should see the homepage.
+This will install the necessary dependencies, launch the server, and open a browser with the
+page loaded (using [lite-server](https://github.com/johnpapa/lite-server)). When you make changes to
+frontend and save the file they should be automatically reflected in the browser.
 
 # Database
 MongoDB 2.6.10

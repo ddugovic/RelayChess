@@ -5,20 +5,20 @@
 
         //load sounds
         var sounds = {
-            capture: ngAudio.load("sound/standard/Capture.ogg"),
-            castle: ngAudio.load("sound/orchestra/Castle.wav"),
-            challenge: ngAudio.load("sound/sfx/NewChallenge.ogg"),
-            check: ngAudio.load("sound/robot/Check.ogg"),
-            click: ngAudio.load("sound/sfx/Berserk.ogg"),
-            defeat: ngAudio.load("sound/orchestra/Defeat.wav"),
-            draw: ngAudio.load("sound/orchestra/Draw.wav"),
-            lobby: ngAudio.load("sound/orchestra/Lobby.mp3"),
-            lowtime: ngAudio.load("sound/standard/LowTime.ogg"),
-            move: ngAudio.load("sound/standard/Move.ogg"),
-            newgame: ngAudio.load("sound/orchestra/NewGame.wav"),
-            notify: ngAudio.load("sound/standard/GenericNotify.ogg"),
-            theme: ngAudio.load("sound/orchestra/Theme.wav"),
-            victory: ngAudio.load("sound/orchestra/Victory.wav")
+            capture: ngAudio.load("assets/sound/standard/Capture.ogg"),
+            castle: ngAudio.load("assets/sound/orchestra/Castle.wav"),
+            challenge: ngAudio.load("assets/sound/sfx/NewChallenge.ogg"),
+            check: ngAudio.load("assets/sound/robot/Check.ogg"),
+            click: ngAudio.load("assets/sound/sfx/Berserk.ogg"),
+            defeat: ngAudio.load("assets/sound/orchestra/Defeat.wav"),
+            draw: ngAudio.load("assets/sound/orchestra/Draw.wav"),
+            lobby: ngAudio.load("assets/sound/orchestra/Lobby.mp3"),
+            lowtime: ngAudio.load("assets/sound/standard/LowTime.ogg"),
+            move: ngAudio.load("assets/sound/standard/Move.ogg"),
+            newgame: ngAudio.load("assets/sound/orchestra/NewGame.wav"),
+            notify: ngAudio.load("assets/sound/standard/GenericNotify.ogg"),
+            theme: ngAudio.load("assets/sound/orchestra/Theme.wav"),
+            victory: ngAudio.load("assets/sound/orchestra/Victory.wav")
         };
 
         function audioService(){ }

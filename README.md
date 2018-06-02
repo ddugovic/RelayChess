@@ -4,6 +4,7 @@ Unleash the madness! Pieces (not pawns) inherit movement powers when protected.
 # How to run
 First, copy the oauth config into the appropriate place:
 ```
+cd server/src/
 cp oauth.client.js.default oauth.client.js
 ```
 Then, edit oauth.client.js with your lichess oauth config. You can find out
@@ -14,7 +15,7 @@ Now, run:
 npm run dev
 ```
 This will install the necessary dependencies, launch the server, and open a browser with the
-page loaded (using [lite-server](https://github.com/johnpapa/lite-server). When you make changes to
+page loaded (using [lite-server](https://github.com/johnpapa/lite-server)). When you make changes to
 frontend and save the file they should be automatically reflected in the browser.
 
 # Database

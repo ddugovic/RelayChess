@@ -1,0 +1,29 @@
+{
+  "name": "relaychess",
+  "version": "1.0.0",
+  "private": true,
+  "description": "RelayChess frontend & backend",
+  "author": "mnemi, ddugovic, & hightides",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mnemi/RelayChess/issues"
+  },
+  "homepage": "https://github.com/mnemi/RelayChess#README",
+  "scripts": {
+    "dev:web": "cd web && npm run dev",
+    "dev:server": "cd server && npm start",
+    "dev": "run-p dev:web dev:server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mnemi/RelayChess.git"
+  },
+  "keywords": [
+    "relaychess",
+    "chess",
+    "chessvariant"
+  ],
+  "devDependencies": {
+    "npm-run-all": "^4.1.3"
+  }
+}

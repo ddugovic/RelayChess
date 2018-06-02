@@ -1,7 +1,8 @@
 {
-  "name": "relaychess",
-  "version": "0.9.0",
-  "description": "Relay Chess game server",
+  "name": "relaychess-server",
+  "version": "1.0.0",
+  "description": "Backend for RelayChess",
+  "private": true,
   "main": "src/app.js",
   "dependencies": {
     "axios": "^0.18.0",
@@ -18,20 +19,7 @@
   },
   "devDependencies": {},
   "scripts": {
+    "prestart": "npm install",
     "start": "node src/app.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ddugovic/RelayChess.git"
-  },
-  "keywords": [
-    "relay",
-    "chess"
-  ],
-  "author": "HighTides and Daniel Dugovic",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ddugovic/RelayChess/issues"
-  },
-  "homepage": "https://github.com/ddugovic/RelayChess#readme"
+  }
 }

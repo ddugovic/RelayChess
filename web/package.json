@@ -1,7 +1,8 @@
 {
-  "name": "relaychess-frontend",
+  "name": "relaychess-web",
   "version": "1.0.0",
   "private": true,
+  "description": "Frontend for Relaychess",
   "dependencies": {},
   "devDependencies": {
     "lite-server": "^2.3.0"

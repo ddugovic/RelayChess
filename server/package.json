@@ -19,7 +19,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "prestart": "npm install",
-    "start": "node src/app.js"
+    "prestart": "mongod --dbpath data --fork --logpath /dev/null",
+    "start": "node src/app.js",
+    "poststop": "mongo --shutdown > /dev/null"
   }
 }

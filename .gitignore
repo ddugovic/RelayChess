@@ -8,6 +8,7 @@ npm-debug.log*
 
 # Runtime data
 data/
+server/data/
 
 # Dependency directories
 node_modules

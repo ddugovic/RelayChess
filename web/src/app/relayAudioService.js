@@ -1,7 +1,6 @@
-(function() {
-    var app = angular.module("relayApp");
-
-    app.factory("relayAudio", function ($rootScope, $location, $localStorage, ngAudio) {
+angular
+    .module("relayApp")
+    .factory("relayAudio", function ($rootScope, $location, $localStorage, ngAudio) {
 
         //load sounds
         var sounds = {
@@ -75,4 +74,3 @@
 
         return audioService;
     });
-})();

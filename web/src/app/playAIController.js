@@ -1,18 +1,23 @@
-(function() {
-    window.requestAnimFrame = (function(){
-        return  window.requestAnimationFrame   ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame    ||
-            window.oRequestAnimationFrame      ||
-            window.msRequestAnimationFrame     ||
-            function(/* function */ callback, /* DOMElement */ element){
-                window.setTimeout(callback, 1000 / 60);
-            };
-    })();
+import stockfishWorker from './lib/stockfishWorker.js';
+import Chess from './lib/chess.js';
+import Chessground from './lib/chessground.js';
 
-    var app = angular.module("relayApp");
+// I really don't know why this is even here or necessary...
+// window.requestAnimFrame = (function(){
+//     return  window.requestAnimationFrame   ||
+//         window.webkitRequestAnimationFrame ||
+//         window.mozRequestAnimationFrame    ||
+//         window.oRequestAnimationFrame      ||
+//         window.msRequestAnimationFrame     ||
+//         function(/* function */ callback, /* DOMElement */ element){
+//             window.setTimeout(callback, 1000 / 60);
+//         };
+// });
 
-    app.controller("playAIController", function ($rootScope, $scope, $http, $window, $route, $routeParams, $location, $localStorage, ModalService, relayAudio) {
+angular
+    .module("relayApp")
+    .controller("playAIController", function ($rootScope, $scope, $http, $window, $route, $routeParams,
+                                              $location, $localStorage, ModalService, relayAudio) {
         relayAudio.ensureLobbyIsNotPlaying();
 
         var level = $routeParams.level;
@@ -29,31 +34,31 @@
 
         var board = angular.element("#relayAIBoard")[0];
         var ground = Chessground(board,
-        {
-            orientation: playOrientation,
-            turnColor: chessToColor(chess),
-            viewOnly: false,
-            animation: {
-                duration: 250
-            },
-            movable: {
-                free: false,
-                color: playOrientation,
-                dests: chessToDests(chess),
-                events: {
-                    after: onMove
-                }
-            },
-            premovable: {
-                relay: true
-            },
-            drawable: {
-                enabled: true
-            },
-            selectable: {
-                enabled: false
-            }
-        });
+                                 {
+                                     orientation: playOrientation,
+                                     turnColor: chessToColor(chess),
+                                     viewOnly: false,
+                                     animation: {
+                                         duration: 250
+                                     },
+                                     movable: {
+                                         free: false,
+                                         color: playOrientation,
+                                         dests: chessToDests(chess),
+                                         events: {
+                                             after: onMove
+                                         }
+                                     },
+                                     premovable: {
+                                         relay: true
+                                     },
+                                     drawable: {
+                                         enabled: true
+                                     },
+                                     selectable: {
+                                         enabled: false
+                                     }
+                                 });
 
         //UI bindings
         $scope.backToLobby = function(){
@@ -206,7 +211,7 @@
 
             var rank = chess.rank(orig);
             if(piece.type == "p" &&
-                ((chess.turn() == "w" && rank == 1) ||
+               ((chess.turn() == "w" && rank == 1) ||
                 (chess.turn() == "b" && rank == 6)))
             {
                 onPromotion(orig, dest);
@@ -244,4 +249,3 @@
             return (chess.turn() == "w") ? "white" : "black";
         }
     });
-})();

@@ -1,18 +1,23 @@
-(function() {
-    window.requestAnimFrame = (function(){
-        return  window.requestAnimationFrame   ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame    ||
-            window.oRequestAnimationFrame      ||
-            window.msRequestAnimationFrame     ||
-            function(/* function */ callback, /* DOMElement */ element){
-        window.setTimeout(callback, 1000 / 60);
-    };
-    })();
+import Chess from './lib/chess.js';
+import Chessground from './lib/chessground.js';
 
-    var app = angular.module("relayApp");
+// Don't know why this is here or necessary
+// window.requestAnimFrame = (function(){
+//     return  window.requestAnimationFrame   ||
+//         window.webkitRequestAnimationFrame ||
+//         window.mozRequestAnimationFrame    ||
+//         window.oRequestAnimationFrame      ||
+//         window.msRequestAnimationFrame     ||
+//         function(/* function */ callback, /* DOMElement */ element){
+//             window.setTimeout(callback, 1000 / 60);
+//         };
+// });
 
-    app.controller("playController", function ($rootScope, $scope, $http, $window, $route, $routeParams, $location, $localStorage, ModalService, relayChess, relayAudio) {
+angular
+    .module("relayApp")
+    .controller("playController", function ($rootScope, $scope, $http, $window, $route, $routeParams,
+                                            $location, $localStorage, ModalService, relayChess,
+                                            relayAudio) {
         $scope.relayChess = relayChess;
         relayAudio.ensureLobbyIsNotPlaying();
 
@@ -55,30 +60,30 @@
 
         var board = angular.element("#relayBoard")[0];
         ground = Chessground(board,
-        {
-            orientation: orientation,
-            turnColor: chessToColor(chess),
-            viewOnly: false,
-            animation: {
-                duration: 250
-            },
-            movable: {
-                free: false,
-                color: "black",
-                events: {
-                    after: onMove
-                }
-            },
-            premovable: {
-                relay: true
-            },
-            drawable: {
-                enabled: true
-            },
-            selectable: {
-                enabled: false
-            }
-        });
+                             {
+                                 orientation: orientation,
+                                 turnColor: chessToColor(chess),
+                                 viewOnly: false,
+                                 animation: {
+                                     duration: 250
+                                 },
+                                 movable: {
+                                     free: false,
+                                     color: "black",
+                                     events: {
+                                         after: onMove
+                                     }
+                                 },
+                                 premovable: {
+                                     relay: true
+                                 },
+                                 drawable: {
+                                     enabled: true
+                                 },
+                                 selectable: {
+                                     enabled: false
+                                 }
+                             });
 
         var lastTimerUpdate = null;
         var timerUpdateFrameRequest = null;
@@ -600,7 +605,7 @@
 
             var rank = chess.rank(orig);
             if(piece.type == "p" &&
-                ((chess.turn() == "w" && rank == 1) || (chess.turn() == "b" && rank == 6)))
+               ((chess.turn() == "w" && rank == 1) || (chess.turn() == "b" && rank == 6)))
             {
                 onPromotion(orig, dest);
 
@@ -646,4 +651,3 @@
             return (chess.turn() == "w") ? "white" : "black";
         }
     });
-})();

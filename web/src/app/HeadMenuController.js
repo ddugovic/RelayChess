@@ -1,7 +1,8 @@
-(function() {
-    var app = angular.module("relayApp");
-
-    app.controller("headMenuController", function ($rootScope, $scope, $http, $window, $route, $routeParams, $location, $localStorage, $timeout, ModalService, relayChess, relayAudio) {
+angular
+    .module("relayApp")
+    .controller("headMenuController", function ($rootScope, $scope, $http, $window, $route, $routeParams,
+                                                $location, $localStorage, $timeout, ModalService,
+                                                relayChess, relayAudio) {
         $scope.relayChess = relayChess;
         $scope.relayAudio = relayAudio;
         $scope.location = $location;
@@ -45,4 +46,3 @@
             relayAudio.muteSound(!relayAudio.soundMuted);
         };
     });
-})();

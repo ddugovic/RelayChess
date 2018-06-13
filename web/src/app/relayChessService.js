@@ -1,9 +1,6 @@
-(function() {
-    var socketServer = "http://localhost:3000/";
-
-    var app = angular.module("relayApp");
-
-    app.factory("relayChess", function ($rootScope, $window, $timeout, $location, $localStorage) {
+angular
+    .module("relayApp")
+    .factory("relayChess", function ($rootScope, $window, $timeout, $location, $localStorage) {
         var data = {
             loggedIn: false,
             anonymousUser: true,
@@ -17,9 +14,7 @@
             activeGames: []
         };
 
-        console.log($localStorage.userToken);
-
-        var socket = io.connect(socketServer);
+        var socket = io.connect("http://localhost:3000/");
 
         data.socket = socket;
 
@@ -162,4 +157,3 @@
 
         return data;
     });
-})();

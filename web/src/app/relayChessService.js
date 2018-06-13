@@ -1,3 +1,5 @@
+import io from 'socket.io-client';
+
 angular
     .module("relayApp")
     .factory("relayChess", function ($rootScope, $window, $timeout, $location, $localStorage) {

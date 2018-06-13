@@ -6,7 +6,8 @@
     "angular": "^1.7.1",
     "angular-modal-service": "^0.13.0",
     "angular-route": "^1.7.1",
-    "ngstorage": "^0.3.11"
+    "ngstorage": "^0.3.11",
+    "socket.io-client": "^2.1.1"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^4.5.1",

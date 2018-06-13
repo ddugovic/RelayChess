@@ -32,7 +32,7 @@ angular
             variant: "relay"
         }, "stockfishRelay");
 
-        var board = angular.element("#relayAIBoard")[0];
+        var board = document.getElementById("relayAIBoard");
         var ground = Chessground(board,
                                  {
                                      orientation: playOrientation,
@@ -155,19 +155,28 @@ angular
         //promotion ui
         var pendingPromotion = null;
 
-        $(".promoteQueen").click(function(){
+        // Helper for promotion clicks
+        function addPromoteHandler(className, callback)
+        {
+            // This is brittle, but the original code did the same, just with jquery.
+            // Expects only one element with the given class
+            const el = document.getElementsByClassName(className)[0];
+            el.onclick = callback;
+        }
+
+        addPromoteHandler('promoteQueen', () => {
             onPromotionFinalize("q");
         });
 
-        $(".promoteRook").click(function(){
+        addPromoteHandler('promoteRook', () => {
             onPromotionFinalize("r");
         });
 
-        $(".promoteBishop").click(function(){
+        addPromoteHandler('promoteBishop', () => {
             onPromotionFinalize("b");
         });
 
-        $(".promoteKnight").click(function(){
+        addPromoteHandler('promoteKnight', () => {
             onPromotionFinalize("n");
         });
 
@@ -175,7 +184,7 @@ angular
         {
             pendingPromotion = {orig: orig, dest: dest};
 
-            $(".promotePanel").css("visibility", "visible");
+            document.getElementsByClassName('.promotePanel')[0].style.visibility = 'visible';
         }
 
         function onPromotionFinalize(promote)
@@ -185,7 +194,7 @@ angular
                 return;
             }
 
-            $(".promotePanel").css("visibility", "hidden");
+            document.getElementsByClassName('.promotePanel')[0].style.visibility = 'hidden';
 
             var move = chess.move({from: pendingPromotion.orig, to: pendingPromotion.dest, promotion: promote});
 

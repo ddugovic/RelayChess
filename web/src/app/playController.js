@@ -58,7 +58,7 @@ angular
         var fen = undefined;
         chess = new Chess(fen);
 
-        var board = angular.element("#relayBoard")[0];
+        var board = document.getElementById("relayBoard");
         ground = Chessground(board,
                              {
                                  orientation: orientation,
@@ -214,28 +214,38 @@ angular
             //TODO
         };
 
-        function showUI(state){
-            angular.element("#preGame").css("display", "none");
-            angular.element("#gameRunning").css("display", "none");
-            angular.element("#gameOver").css("display", "none");
+        // Helpers for showUI
+        function hideElem(id) {
+            const el = document.getElementById(id);
+            el.style.display = 'none';
+        }
+        function showElem(id) {
+            const el = document.getElementById(id);
+            el.style.display = 'inherit';
+        }
 
-            if(spectating){
+        function showUI(state) {
+            hideElem('preGame');
+            hideElem('gameRunning');
+            hideElem('gameOver');
+
+            if (spectating) {
                 //spectator ui
-                if(state == "postgame"){
-                    angular.element("#gameOver").css("display", "inherit");
+                if (state == 'postgame') {
+                    showElem('gameOver');
                 }
             }
             else
             {
                 //player ui
-                if(state == "pregame"){
-                    angular.element("#preGame").css("display", "inherit");
+                if (state == 'pregame') {
+                    showElem('preGame');
                 }
-                else if(state == "ingame"){
-                    angular.element("#gameRunning").css("display", "inherit");
+                else if (state == 'ingame') {
+                    showElem('gameRunning');
                 }
-                else if(state == "postgame"){
-                    angular.element("#gameOver").css("display", "inherit");
+                else if (state == 'postgame') {
+                    showElem('gameOver');
                 }
             }
         }
@@ -496,19 +506,28 @@ angular
         //promotion ui
         var pendingPromotion = null;
 
-        $(".promoteQueen").click(function(){
+        // Helper for promotion clicks
+        function addPromoteHandler(className, callback)
+        {
+            // This is brittle, but the original code did the same, just with jquery.
+            // Expects only one element with the given class
+            const el = document.getElementsByClassName(className)[0];
+            el.onclick = callback;
+        }
+
+        addPromoteHandler('promoteQueen', () => {
             onPromotionFinalize("q");
         });
 
-        $(".promoteRook").click(function(){
+        addPromoteHandler('promoteRook', () => {
             onPromotionFinalize("r");
         });
 
-        $(".promoteBishop").click(function(){
+        addPromoteHandler('promoteBishop', () => {
             onPromotionFinalize("b");
         });
 
-        $(".promoteKnight").click(function(){
+        addPromoteHandler('promoteKnight', () => {
             onPromotionFinalize("n");
         });
 
@@ -516,7 +535,7 @@ angular
         {
             pendingPromotion = {orig: orig, dest: dest};
 
-            $(".promotePanel").css("visibility", "visible");
+            document.getElementsByClassName('.promotePanel')[0].style.visibility = 'visible';
         };
 
         function onPromotionFinalize(promote)
@@ -526,7 +545,7 @@ angular
                 return;
             }
 
-            $(".promotePanel").css("visibility", "hidden");
+            document.getElementsByClassName('.promotePanel')[0].style.visibility = 'hidden';
 
             var move = chess.move({from: pendingPromotion.orig, to: pendingPromotion.dest, promotion: promote});
 

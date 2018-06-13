@@ -1,6 +1,6 @@
 import stockfishWorker from './lib/stockfishWorker.js';
 import Chess from './lib/chess.js';
-import Chessground from './lib/chessground.js';
+import { Chessground } from 'chessground';
 
 // I really don't know why this is even here or necessary...
 // window.requestAnimFrame = (function(){
@@ -119,12 +119,13 @@ angular
                 movable: {
                     color: chessToColor(chess),
                     dests: chessToDests(chess)
-                }
+                },
+                check: false
             });
 
             if(chess.in_check())
             {
-                ground.setCheck();
+                ground.set({check: chessToColor(chess)});
             }
 
             //play premove if set
@@ -190,12 +191,13 @@ angular
 
             ground.set({
                 fen: chess.fen(),
-                turnColor: chessToColor(chess)
+                turnColor: chessToColor(chess),
+                check: false
             });
 
             if(chess.in_check())
             {
-                ground.setCheck();
+                ground.set({check: chessToColor(chess)});
             }
 
             SearchAIMove();
@@ -223,12 +225,13 @@ angular
 
             ground.set({
                 fen: chess.fen(),
-                turnColor: chessToColor(chess)
+                turnColor: chessToColor(chess),
+                check: false
             });
 
             if(chess.in_check())
             {
-                ground.setCheck();
+                ground.set({check: chessToColor(chess)});
             }
 
             playSound(move);

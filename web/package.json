@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "angular": "^1.7.1",
+    "angular-audio": "^1.7.3",
     "angular-modal-service": "^0.13.0",
     "angular-route": "^1.7.1",
     "chessground": "^7.3.2",

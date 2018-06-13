@@ -1,9 +1,9 @@
 import angular from 'angular';
 import 'angular-route';
 import 'ngstorage';
+import 'angular-modal-service';
 
 import './lib/angular.audio.js';
-import './lib/angularModalService.js';
 
 import './config.js';
 import './relayChessService.js';

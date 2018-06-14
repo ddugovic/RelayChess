@@ -1,18 +1,23 @@
-(function() {
-    window.requestAnimFrame = (function(){
-        return  window.requestAnimationFrame   ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame    ||
-            window.oRequestAnimationFrame      ||
-            window.msRequestAnimationFrame     ||
-            function(/* function */ callback, /* DOMElement */ element){
-                window.setTimeout(callback, 1000 / 60);
-            };
-    })();
+import stockfishWorker from './lib/stockfishWorker.js';
+import Chess from './lib/chess.js';
+import { Chessground } from 'chessground';
 
-    var app = angular.module("relayApp");
+// I really don't know why this is even here or necessary...
+// window.requestAnimFrame = (function(){
+//     return  window.requestAnimationFrame   ||
+//         window.webkitRequestAnimationFrame ||
+//         window.mozRequestAnimationFrame    ||
+//         window.oRequestAnimationFrame      ||
+//         window.msRequestAnimationFrame     ||
+//         function(/* function */ callback, /* DOMElement */ element){
+//             window.setTimeout(callback, 1000 / 60);
+//         };
+// });
 
-    app.controller("playAIController", function ($rootScope, $scope, $http, $window, $route, $routeParams, $location, $localStorage, ModalService, relayAudio) {
+angular
+    .module("relayApp")
+    .controller("playAIController", function ($rootScope, $scope, $http, $window, $route, $routeParams,
+                                              $location, $localStorage, ModalService, relayAudio) {
         relayAudio.ensureLobbyIsNotPlaying();
 
         var level = $routeParams.level;
@@ -27,33 +32,33 @@
             variant: "relay"
         }, "stockfishRelay");
 
-        var board = angular.element("#relayAIBoard")[0];
+        var board = document.getElementById("relayAIBoard");
         var ground = Chessground(board,
-        {
-            orientation: playOrientation,
-            turnColor: chessToColor(chess),
-            viewOnly: false,
-            animation: {
-                duration: 250
-            },
-            movable: {
-                free: false,
-                color: playOrientation,
-                dests: chessToDests(chess),
-                events: {
-                    after: onMove
-                }
-            },
-            premovable: {
-                relay: true
-            },
-            drawable: {
-                enabled: true
-            },
-            selectable: {
-                enabled: false
-            }
-        });
+                                 {
+                                     orientation: playOrientation,
+                                     turnColor: chessToColor(chess),
+                                     viewOnly: false,
+                                     animation: {
+                                         duration: 250
+                                     },
+                                     movable: {
+                                         free: false,
+                                         color: playOrientation,
+                                         dests: chessToDests(chess),
+                                         events: {
+                                             after: onMove
+                                         }
+                                     },
+                                     premovable: {
+                                         relay: true
+                                     },
+                                     drawable: {
+                                         enabled: true
+                                     },
+                                     selectable: {
+                                         enabled: false
+                                     }
+                                 });
 
         //UI bindings
         $scope.backToLobby = function(){
@@ -114,12 +119,13 @@
                 movable: {
                     color: chessToColor(chess),
                     dests: chessToDests(chess)
-                }
+                },
+                check: false
             });
 
             if(chess.in_check())
             {
-                ground.setCheck();
+                ground.set({check: chessToColor(chess)});
             }
 
             //play premove if set
@@ -149,19 +155,28 @@
         //promotion ui
         var pendingPromotion = null;
 
-        $(".promoteQueen").click(function(){
+        // Helper for promotion clicks
+        function addPromoteHandler(className, callback)
+        {
+            // This is brittle, but the original code did the same, just with jquery.
+            // Expects only one element with the given class
+            const el = document.getElementsByClassName(className)[0];
+            el.onclick = callback;
+        }
+
+        addPromoteHandler('promoteQueen', () => {
             onPromotionFinalize("q");
         });
 
-        $(".promoteRook").click(function(){
+        addPromoteHandler('promoteRook', () => {
             onPromotionFinalize("r");
         });
 
-        $(".promoteBishop").click(function(){
+        addPromoteHandler('promoteBishop', () => {
             onPromotionFinalize("b");
         });
 
-        $(".promoteKnight").click(function(){
+        addPromoteHandler('promoteKnight', () => {
             onPromotionFinalize("n");
         });
 
@@ -169,7 +184,7 @@
         {
             pendingPromotion = {orig: orig, dest: dest};
 
-            $(".promotePanel").css("visibility", "visible");
+            document.getElementsByClassName('.promotePanel')[0].style.visibility = 'visible';
         }
 
         function onPromotionFinalize(promote)
@@ -179,18 +194,19 @@
                 return;
             }
 
-            $(".promotePanel").css("visibility", "hidden");
+            document.getElementsByClassName('.promotePanel')[0].style.visibility = 'hidden';
 
             var move = chess.move({from: pendingPromotion.orig, to: pendingPromotion.dest, promotion: promote});
 
             ground.set({
                 fen: chess.fen(),
-                turnColor: chessToColor(chess)
+                turnColor: chessToColor(chess),
+                check: false
             });
 
             if(chess.in_check())
             {
-                ground.setCheck();
+                ground.set({check: chessToColor(chess)});
             }
 
             SearchAIMove();
@@ -206,7 +222,7 @@
 
             var rank = chess.rank(orig);
             if(piece.type == "p" &&
-                ((chess.turn() == "w" && rank == 1) ||
+               ((chess.turn() == "w" && rank == 1) ||
                 (chess.turn() == "b" && rank == 6)))
             {
                 onPromotion(orig, dest);
@@ -218,12 +234,13 @@
 
             ground.set({
                 fen: chess.fen(),
-                turnColor: chessToColor(chess)
+                turnColor: chessToColor(chess),
+                check: false
             });
 
             if(chess.in_check())
             {
-                ground.setCheck();
+                ground.set({check: chessToColor(chess)});
             }
 
             playSound(move);
@@ -244,4 +261,3 @@
             return (chess.turn() == "w") ? "white" : "black";
         }
     });
-})();

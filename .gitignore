@@ -9,3 +9,6 @@ node_modules
 server/node_modules
 web/node_modules
 
+# build artifacts
+web/dist/
+web/build/

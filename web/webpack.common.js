@@ -1,17 +1,12 @@
-'use strict';
-
+const path = require('path');
 const webpack = require('webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const config = {
-    mode: 'development',
-    devtool: 'eval-source-map',
+module.exports = {
     entry: {
         app: './src/app/app.js'
-    },
-    output: {
-        filename: 'app.js'
     },
     module: {
         rules: [
@@ -20,6 +15,7 @@ const config = {
         ]
     },
     plugins: [
+        new CleanWebpackPlugin(['dist']),
         new HtmlWebpackPlugin({
             template: './src/index.html',
             inject: 'head'
@@ -32,7 +28,9 @@ const config = {
             { from: './src/app/lib/stockfish.js',
               to: 'lib/stockfish.js' }
         ])
-    ]
+    ],
+    output: {
+        filename: 'app.js',
+        path: path.resolve(__dirname, 'dist')
+    },
 };
-
-module.exports = config;

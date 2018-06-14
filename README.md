@@ -1,7 +1,7 @@
 # RelayChess
 Unleash the madness! Pieces (not pawns) inherit movement powers when protected.
 
-![RelayChess Lobby](https://raw.githubusercontent.com/ddugovic/relaychess/imgs/lobby.png)
+![RelayChess Lobby](lobby.png?raw=true "RelayChess Lobby")
 
 # How to run
 

@@ -15,9 +15,16 @@ angular
             seeks: [],
             activeGames: []
         };
+       
+        // Configure client depending on if we're developing
+        let wss; 
+        if (process.env.NODE_ENV !== 'production') {
+            wss = 'http://localhost:3000/';
+        } else {
+            wss = 'http://relaychess.mooo.com:3000/';
+        }
 
-        var socket = io.connect("http://localhost:3000/");
-
+        const socket = io.connect(wss);
         data.socket = socket;
 
         //update user info

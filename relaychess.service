@@ -7,7 +7,7 @@ After=syslog.target network-online.target mongodb.service
 Type=simple
 User=relay
 Group=relay
-ExecStart=/usr/bin/node /home/relay/RelayChess/app.js
+ExecStart=/usr/bin/node /home/relay/RelayChess/server/src/app.js
 Restart=always
 
 [Install]

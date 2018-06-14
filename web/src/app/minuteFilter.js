@@ -1,7 +1,6 @@
-(function(){
-    var app = angular.module("relayApp");
-
-    app.filter("asMinutes", function(){
+angular
+    .module("relayApp")
+    .filter("asMinutes", function(){
         return function(input){
             function roundX(number, precision) {
                 var factor = Math.pow(10, precision);
@@ -26,5 +25,3 @@
             return ("00" + minutes).slice(-2) + ":" + ("00" + seconds).slice(-2);
         };
     });
-
-})();

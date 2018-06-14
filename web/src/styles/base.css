@@ -10,7 +10,7 @@ body {
 }
 
 #logo {
-    background-image: url("../res/logo.png");
+    background-image: url("../assets/images/logo.png");
     background-repeat: no-repeat;
 
     width:411px;
@@ -27,7 +27,7 @@ body {
 
     opacity:0.018;
 
-    background-image: url("../res/torch.svg");
+    background-image: url("../assets/images/torch.svg");
     background-size: 492px 1587px;
     background-repeat: no-repeat;
 }

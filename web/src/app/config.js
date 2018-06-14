@@ -1,11 +1,9 @@
-(function() {
-    var app = angular.module("relayApp", ["ngRoute", "ngStorage", "angularModalService", "ngAudio"]);
-
-    //config our routes
-    app.config(function ($routeProvider) {
+angular
+    .module("relayApp", ["ngRoute", "ngStorage", "angularModalService", "ngAudio"])
+    .config(function ($routeProvider) {
         $routeProvider.when("/", {
             templateUrl: "lobby.html",
-        controller: "lobbyController"
+            controller: "lobbyController"
         }).when("/rules", {
             templateUrl: "rules.html",
             controller: "lobbyController"
@@ -20,4 +18,3 @@
             controller: "playAIController"
         }).otherwise({redirectTo: "/"});
     });
-})();

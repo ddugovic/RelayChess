@@ -1,18 +1,23 @@
-(function() {
-    window.requestAnimFrame = (function(){
-        return  window.requestAnimationFrame   ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame    ||
-            window.oRequestAnimationFrame      ||
-            window.msRequestAnimationFrame     ||
-            function(/* function */ callback, /* DOMElement */ element){
-        window.setTimeout(callback, 1000 / 60);
-    };
-    })();
+import Chess from './lib/chess.js';
+import Chessground from 'chessground';
 
-    var app = angular.module("relayApp");
+// Don't know why this is here or necessary
+// window.requestAnimFrame = (function(){
+//     return  window.requestAnimationFrame   ||
+//         window.webkitRequestAnimationFrame ||
+//         window.mozRequestAnimationFrame    ||
+//         window.oRequestAnimationFrame      ||
+//         window.msRequestAnimationFrame     ||
+//         function(/* function */ callback, /* DOMElement */ element){
+//             window.setTimeout(callback, 1000 / 60);
+//         };
+// });
 
-    app.controller("playController", function ($rootScope, $scope, $http, $window, $route, $routeParams, $location, $localStorage, ModalService, relayChess, relayAudio) {
+angular
+    .module("relayApp")
+    .controller("playController", function ($rootScope, $scope, $http, $window, $route, $routeParams,
+                                            $location, $localStorage, ModalService, relayChess,
+                                            relayAudio) {
         $scope.relayChess = relayChess;
         relayAudio.ensureLobbyIsNotPlaying();
 
@@ -53,32 +58,32 @@
         var fen = undefined;
         chess = new Chess(fen);
 
-        var board = angular.element("#relayBoard")[0];
+        var board = document.getElementById("relayBoard");
         ground = Chessground(board,
-        {
-            orientation: orientation,
-            turnColor: chessToColor(chess),
-            viewOnly: false,
-            animation: {
-                duration: 250
-            },
-            movable: {
-                free: false,
-                color: "black",
-                events: {
-                    after: onMove
-                }
-            },
-            premovable: {
-                relay: true
-            },
-            drawable: {
-                enabled: true
-            },
-            selectable: {
-                enabled: false
-            }
-        });
+                             {
+                                 orientation: orientation,
+                                 turnColor: chessToColor(chess),
+                                 viewOnly: false,
+                                 animation: {
+                                     duration: 250
+                                 },
+                                 movable: {
+                                     free: false,
+                                     color: "black",
+                                     events: {
+                                         after: onMove
+                                     }
+                                 },
+                                 premovable: {
+                                     relay: true
+                                 },
+                                 drawable: {
+                                     enabled: true
+                                 },
+                                 selectable: {
+                                     enabled: false
+                                 }
+                             });
 
         var lastTimerUpdate = null;
         var timerUpdateFrameRequest = null;
@@ -209,28 +214,38 @@
             //TODO
         };
 
-        function showUI(state){
-            angular.element("#preGame").css("display", "none");
-            angular.element("#gameRunning").css("display", "none");
-            angular.element("#gameOver").css("display", "none");
+        // Helpers for showUI
+        function hideElem(id) {
+            const el = document.getElementById(id);
+            el.style.display = 'none';
+        }
+        function showElem(id) {
+            const el = document.getElementById(id);
+            el.style.display = 'inherit';
+        }
 
-            if(spectating){
+        function showUI(state) {
+            hideElem('preGame');
+            hideElem('gameRunning');
+            hideElem('gameOver');
+
+            if (spectating) {
                 //spectator ui
-                if(state == "postgame"){
-                    angular.element("#gameOver").css("display", "inherit");
+                if (state == 'postgame') {
+                    showElem('gameOver');
                 }
             }
             else
             {
                 //player ui
-                if(state == "pregame"){
-                    angular.element("#preGame").css("display", "inherit");
+                if (state == 'pregame') {
+                    showElem('preGame');
                 }
-                else if(state == "ingame"){
-                    angular.element("#gameRunning").css("display", "inherit");
+                else if (state == 'ingame') {
+                    showElem('gameRunning');
                 }
-                else if(state == "postgame"){
-                    angular.element("#gameOver").css("display", "inherit");
+                else if (state == 'postgame') {
+                    showElem('gameOver');
                 }
             }
         }
@@ -491,19 +506,28 @@
         //promotion ui
         var pendingPromotion = null;
 
-        $(".promoteQueen").click(function(){
+        // Helper for promotion clicks
+        function addPromoteHandler(className, callback)
+        {
+            // This is brittle, but the original code did the same, just with jquery.
+            // Expects only one element with the given class
+            const el = document.getElementsByClassName(className)[0];
+            el.onclick = callback;
+        }
+
+        addPromoteHandler('promoteQueen', () => {
             onPromotionFinalize("q");
         });
 
-        $(".promoteRook").click(function(){
+        addPromoteHandler('promoteRook', () => {
             onPromotionFinalize("r");
         });
 
-        $(".promoteBishop").click(function(){
+        addPromoteHandler('promoteBishop', () => {
             onPromotionFinalize("b");
         });
 
-        $(".promoteKnight").click(function(){
+        addPromoteHandler('promoteKnight', () => {
             onPromotionFinalize("n");
         });
 
@@ -511,7 +535,7 @@
         {
             pendingPromotion = {orig: orig, dest: dest};
 
-            $(".promotePanel").css("visibility", "visible");
+            document.getElementsByClassName('.promotePanel')[0].style.visibility = 'visible';
         };
 
         function onPromotionFinalize(promote)
@@ -521,7 +545,7 @@
                 return;
             }
 
-            $(".promotePanel").css("visibility", "hidden");
+            document.getElementsByClassName('.promotePanel')[0].style.visibility = 'hidden';
 
             var move = chess.move({from: pendingPromotion.orig, to: pendingPromotion.dest, promotion: promote});
 
@@ -600,7 +624,7 @@
 
             var rank = chess.rank(orig);
             if(piece.type == "p" &&
-                ((chess.turn() == "w" && rank == 1) || (chess.turn() == "b" && rank == 6)))
+               ((chess.turn() == "w" && rank == 1) || (chess.turn() == "b" && rank == 6)))
             {
                 onPromotion(orig, dest);
 
@@ -646,4 +670,3 @@
             return (chess.turn() == "w") ? "white" : "black";
         }
     });
-})();

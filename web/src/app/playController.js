@@ -257,12 +257,12 @@ angular
 
             //set history and position
             chess = new Chess();
-            for (move in response.history) {
+            for (let move in response.history) {
                 chess.move(response.history[move]);
             }
             var lastMove = null;
             var history = chess.history({verbose: true});
-            for (move in history) {
+            for (let move in history) {
                 lastMove = history[move];
             }
 

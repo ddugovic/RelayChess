@@ -1,5 +1,5 @@
 import Chess from './lib/chess.js';
-import Chessground from 'chessground';
+import { Chessground } from 'chessground';
 
 // Don't know why this is here or necessary
 // window.requestAnimFrame = (function(){

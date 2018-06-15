@@ -1,18 +1,6 @@
 import Chess from './lib/chess.js';
 import { Chessground } from 'chessground';
 
-// Don't know why this is here or necessary
-// window.requestAnimFrame = (function(){
-//     return  window.requestAnimationFrame   ||
-//         window.webkitRequestAnimationFrame ||
-//         window.mozRequestAnimationFrame    ||
-//         window.oRequestAnimationFrame      ||
-//         window.msRequestAnimationFrame     ||
-//         function(/* function */ callback, /* DOMElement */ element){
-//             window.setTimeout(callback, 1000 / 60);
-//         };
-// });
-
 angular
     .module("relayApp")
     .controller("playController", function ($rootScope, $scope, $http, $window, $route, $routeParams,
@@ -126,7 +114,7 @@ angular
             lastTimerUpdate = Date.now();
 
             if(gameRunning) {
-                timerUpdateFrameRequest = window.requestAnimFrame(updateTimer);
+                timerUpdateFrameRequest = window.requestAnimationFrame(updateTimer);
                 if(!spectating) {
                     if($scope.us.time * 60 >= 20) {
                         lowtime = false;

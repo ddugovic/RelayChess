@@ -13,6 +13,8 @@ body {
     background-image: url("../assets/images/logo.png");
     background-repeat: no-repeat;
 
+    outline: none;
+
     width:411px;
     height:125px;
 }

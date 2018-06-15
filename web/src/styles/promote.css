@@ -19,17 +19,17 @@
 }
 
 .promote.queen {
-    background-image: url('../assets/images/pieces/cburnett/wQ.svg');
+    background-image: url('../assets/chessground/images/pieces/cburnett/wQ.svg');
 }
 
 .promote.rook {
-    background-image: url('../assets/images/pieces/cburnett/wR.svg');
+    background-image: url('../assets/chessground/images/pieces/cburnett/wR.svg');
 }
 
 .promote.bishop {
-    background-image: url('../assets/images/pieces/cburnett/wB.svg');
+    background-image: url('../assets/chessground/images/pieces/cburnett/wB.svg');
 }
 
 .promote.knight {
-    background-image: url('../assets/images/pieces/cburnett/wN.svg');
+    background-image: url('../assets/chessground/images/pieces/cburnett/wN.svg');
 }

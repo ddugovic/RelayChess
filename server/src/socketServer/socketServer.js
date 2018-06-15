@@ -15,10 +15,10 @@ module.exports = {
     startServer: function()
     {
         //start the socket server
-        io.on("connection", function(socket){
-            handleUsers(socket);
-            handleSeeks(socket);
-            handleGames(socket);
+        io.on("connection", function(sock){
+            handleUsers(sock);
+            handleSeeks(sock);
+            handleGames(sock);
        });
     }
 };

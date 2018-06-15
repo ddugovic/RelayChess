@@ -526,7 +526,7 @@ angular
         {
             pendingPromotion = {orig: orig, dest: dest};
 
-            document.getElementsByClassName('.promotePanel')[0].style.visibility = 'visible';
+            document.getElementsByClassName('promotePanel')[0].style.visibility = 'visible';
         };
 
         function onPromotionFinalize(promote)
@@ -536,7 +536,7 @@ angular
                 return;
             }
 
-            document.getElementsByClassName('.promotePanel')[0].style.visibility = 'hidden';
+            document.getElementsByClassName('promotePanel')[0].style.visibility = 'hidden';
 
             var move = chess.move({from: pendingPromotion.orig, to: pendingPromotion.dest, promotion: promote});
 

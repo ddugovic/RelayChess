@@ -2,18 +2,6 @@ import stockfishWorker from './lib/stockfishWorker.js';
 import Chess from './lib/chess.js';
 import { Chessground } from 'chessground';
 
-// I really don't know why this is even here or necessary...
-// window.requestAnimFrame = (function(){
-//     return  window.requestAnimationFrame   ||
-//         window.webkitRequestAnimationFrame ||
-//         window.mozRequestAnimationFrame    ||
-//         window.oRequestAnimationFrame      ||
-//         window.msRequestAnimationFrame     ||
-//         function(/* function */ callback, /* DOMElement */ element){
-//             window.setTimeout(callback, 1000 / 60);
-//         };
-// });
-
 angular
     .module("relayApp")
     .controller("playAIController", function ($rootScope, $scope, $http, $window, $route, $routeParams,
@@ -184,7 +172,7 @@ angular
         {
             pendingPromotion = {orig: orig, dest: dest};
 
-            document.getElementsByClassName('.promotePanel')[0].style.visibility = 'visible';
+            document.getElementsByClassName('promotePanel')[0].style.visibility = 'visible';
         }
 
         function onPromotionFinalize(promote)
@@ -194,7 +182,7 @@ angular
                 return;
             }
 
-            document.getElementsByClassName('.promotePanel')[0].style.visibility = 'hidden';
+            document.getElementsByClassName('promotePanel')[0].style.visibility = 'hidden';
 
             var move = chess.move({from: pendingPromotion.orig, to: pendingPromotion.dest, promotion: promote});
 

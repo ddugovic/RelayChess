@@ -1,17 +1,5 @@
 import Chess from './lib/chess.js';
-import Chessground from 'chessground';
-
-// Don't know why this is here or necessary
-// window.requestAnimFrame = (function(){
-//     return  window.requestAnimationFrame   ||
-//         window.webkitRequestAnimationFrame ||
-//         window.mozRequestAnimationFrame    ||
-//         window.oRequestAnimationFrame      ||
-//         window.msRequestAnimationFrame     ||
-//         function(/* function */ callback, /* DOMElement */ element){
-//             window.setTimeout(callback, 1000 / 60);
-//         };
-// });
+import { Chessground } from 'chessground';
 
 angular
     .module("relayApp")
@@ -126,7 +114,7 @@ angular
             lastTimerUpdate = Date.now();
 
             if(gameRunning) {
-                timerUpdateFrameRequest = window.requestAnimFrame(updateTimer);
+                timerUpdateFrameRequest = window.requestAnimationFrame(updateTimer);
                 if(!spectating) {
                     if($scope.us.time * 60 >= 20) {
                         lowtime = false;
@@ -269,12 +257,12 @@ angular
 
             //set history and position
             chess = new Chess();
-            for (move in response.history) {
+            for (let move in response.history) {
                 chess.move(response.history[move]);
             }
             var lastMove = null;
             var history = chess.history({verbose: true});
-            for (move in history) {
+            for (let move in history) {
                 lastMove = history[move];
             }
 
@@ -299,13 +287,14 @@ angular
                 ground.set({
                     fen: response.fen,
                     lastMove: lastMove == null ? null : [lastMove.from, lastMove.to],
-                    turnColor: chessToColor(chess)
+                    turnColor: chessToColor(chess),
+                    check: false
                 });
             }
 
             if(chess.in_check())
             {
-                ground.setCheck();
+                ground.set({check: chessToColor(chess)});
             }
 
             updateActivePlayer();
@@ -403,7 +392,8 @@ angular
                     movable: {
                         color: chessToColor(chess),
                         dests: chessToDests(chess)
-                    }
+                    },
+                    check: false
                 });
             }
             else
@@ -411,13 +401,14 @@ angular
                 //opponents turn or spectating
                 ground.set({
                     fen: response.fen,
-                    lastMove: [response.move.from, response.move.to]
+                    lastMove: [response.move.from, response.move.to],
+                    check: false
                 });
             }
 
             if(chess.in_check())
             {
-                ground.setCheck();
+                ground.set({check: chessToColor(chess)});
             }
 
             updateActivePlayer();
@@ -535,7 +526,7 @@ angular
         {
             pendingPromotion = {orig: orig, dest: dest};
 
-            document.getElementsByClassName('.promotePanel')[0].style.visibility = 'visible';
+            document.getElementsByClassName('promotePanel')[0].style.visibility = 'visible';
         };
 
         function onPromotionFinalize(promote)
@@ -545,7 +536,7 @@ angular
                 return;
             }
 
-            document.getElementsByClassName('.promotePanel')[0].style.visibility = 'hidden';
+            document.getElementsByClassName('promotePanel')[0].style.visibility = 'hidden';
 
             var move = chess.move({from: pendingPromotion.orig, to: pendingPromotion.dest, promotion: promote});
 
@@ -555,12 +546,13 @@ angular
 
             ground.set({
                 fen: chess.fen(),
-                turnColor: chessToColor(chess)
+                turnColor: chessToColor(chess),
+                check: false
             });
 
             if(chess.in_check())
             {
-                ground.setCheck();
+                ground.set({check: chessToColor(chess)});
             }
 
             //send move to server
@@ -643,12 +635,13 @@ angular
             onCastle(move);
 
             ground.set({
-                turnColor: chessToColor(chess)
+                turnColor: chessToColor(chess),
+                check: false
             });
 
             if(chess.in_check())
             {
-                ground.setCheck();
+                ground.set({check: chessToColor(chess)});
             }
 
             //send move to server

@@ -299,13 +299,14 @@ angular
                 ground.set({
                     fen: response.fen,
                     lastMove: lastMove == null ? null : [lastMove.from, lastMove.to],
-                    turnColor: chessToColor(chess)
+                    turnColor: chessToColor(chess),
+                    check: false
                 });
             }
 
             if(chess.in_check())
             {
-                ground.setCheck();
+                ground.set({check: chessToColor(chess)});
             }
 
             updateActivePlayer();
@@ -403,7 +404,8 @@ angular
                     movable: {
                         color: chessToColor(chess),
                         dests: chessToDests(chess)
-                    }
+                    },
+                    check: false
                 });
             }
             else
@@ -411,13 +413,14 @@ angular
                 //opponents turn or spectating
                 ground.set({
                     fen: response.fen,
-                    lastMove: [response.move.from, response.move.to]
+                    lastMove: [response.move.from, response.move.to],
+                    check: false
                 });
             }
 
             if(chess.in_check())
             {
-                ground.setCheck();
+                ground.set({check: chessToColor(chess)});
             }
 
             updateActivePlayer();
@@ -555,12 +558,13 @@ angular
 
             ground.set({
                 fen: chess.fen(),
-                turnColor: chessToColor(chess)
+                turnColor: chessToColor(chess),
+                check: false
             });
 
             if(chess.in_check())
             {
-                ground.setCheck();
+                ground.set({check: chessToColor(chess)});
             }
 
             //send move to server
@@ -643,12 +647,13 @@ angular
             onCastle(move);
 
             ground.set({
-                turnColor: chessToColor(chess)
+                turnColor: chessToColor(chess),
+                check: false
             });
 
             if(chess.in_check())
             {
-                ground.setCheck();
+                ground.set({check: chessToColor(chess)});
             }
 
             //send move to server

@@ -14,7 +14,7 @@
     "mongodb": "^2.2.9",
     "simple-oauth2": "^1.5.2",
     "socket.io": "^1.7.4",
-    "underscore": "^1.8.3"
+    "underscore": "^1.10.2"
   },
   "devDependencies": {},
   "scripts": {

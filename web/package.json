@@ -5,7 +5,7 @@
   "dependencies": {
     "angular": "^1.7.1",
     "angular-audio": "^1.7.3",
-    "angular-modal-service": "^0.13.0",
+    "angular-modal-service": "^0.15.6",
     "angular-route": "^1.7.1",
     "chessground": "^7.6.12",
     "ngstorage": "^0.3.11",

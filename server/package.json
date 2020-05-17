@@ -9,7 +9,7 @@
     "cookie": "^0.3.1",
     "cookie-parser": "^1.4.3",
     "crypto": "^1.0.1",
-    "express": "^4.16.3",
+    "express": "^4.17.1",
     "glicko2-lite": "^1.0.1",
     "mongodb": "^2.2.9",
     "simple-oauth2": "^1.5.2",

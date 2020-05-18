@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "clean-webpack-plugin": "^0.1.19",
-    "copy-webpack-plugin": "^4.5.1",
+    "copy-webpack-plugin": "^5.1.1",
     "html-webpack-plugin": "^4.3.0",
     "raw-loader": "^4.0.1",
     "webpack": "^4.12.0",

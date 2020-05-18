@@ -416,9 +416,9 @@
       "integrity": "sha512-tFXEeLDIMs/mrOKTJrQqCvYCWzUiVvz3e8N+bUPStGSRvFZTFOWPatVQGSYDKewZP/NJ6owwHaIyXoWYftrkpw=="
     },
     "angular-route": {
-      "version": "1.7.1",
-      "resolved": "https://registry.npmjs.org/angular-route/-/angular-route-1.7.1.tgz",
-      "integrity": "sha512-UK4Ky6llpNMMMp4y+CJlg4rQFWz+mvt/0iGc6HHX6MbilkAp13vgwJ2kuAjb0qgRcn121FU9y4z8pt6fzjS/NQ=="
+      "version": "1.7.9",
+      "resolved": "https://registry.npmjs.org/angular-route/-/angular-route-1.7.9.tgz",
+      "integrity": "sha512-vRoj5hzdQtWbODhWJqDzD1iNOEfCKshO6GFBuPVV7RHlPjzIc4R2dHCc7Qiv/8F3LDxJDohc6vSnTDMLHuaqeA=="
     },
     "ansi-colors": {
       "version": "3.2.4",

@@ -7,7 +7,7 @@
     "axios": "^0.18.1",
     "co": "^4.6.0",
     "cookie": "^0.4.1",
-    "cookie-parser": "^1.4.3",
+    "cookie-parser": "^1.4.5",
     "crypto": "^1.0.1",
     "express": "^4.17.1",
     "glicko2-lite": "^1.0.1",

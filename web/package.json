@@ -6,7 +6,7 @@
     "angular": "^1.7.1",
     "angular-audio": "^1.7.3",
     "angular-modal-service": "^0.15.6",
-    "angular-route": "^1.7.1",
+    "angular-route": "^1.7.9",
     "chessground": "^7.6.12",
     "ngstorage": "^0.3.11",
     "socket.io-client": "^2.1.1"

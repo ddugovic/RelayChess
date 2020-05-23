@@ -20,14 +20,11 @@ module.exports = {
             template: './src/index.html',
             inject: 'head'
         }),
-        new CopyWebpackPlugin([
-            { from: './src/assets/',
-              to: 'assets/' },
-            { from: './src/styles/',
-              to: 'styles/' },
-            { from: './src/app/lib/stockfish.js',
-              to: 'lib/stockfish.js' }
-        ])
+        new CopyWebpackPlugin({patterns: [
+            { from: './src/assets/', to: 'assets/' },
+            { from: './src/styles/', to: 'styles/' },
+            { from: './src/app/lib/stockfish.js', to: 'lib/stockfish.js' }
+        ]})
     ],
     output: {
         filename: 'app.js',

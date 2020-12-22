@@ -4,7 +4,7 @@
   "description": "Relay Chess server",
   "main": "src/app.js",
   "dependencies": {
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "co": "^4.6.0",
     "cookie": "^0.4.1",
     "cookie-parser": "^1.4.5",

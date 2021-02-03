@@ -11,7 +11,7 @@
     "crypto": "^1.0.1",
     "express": "^4.17.1",
     "glicko2-lite": "^1.0.1",
-    "mongodb": "^3.6.3",
+    "mongodb": "^3.6.4",
     "simple-oauth2": "^4.2.0",
     "socket.io": "^3.1.0",
     "underscore": "^1.12.0"

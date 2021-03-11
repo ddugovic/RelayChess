@@ -13,7 +13,7 @@
     "glicko2-lite": "^1.0.1",
     "mongodb": "^3.6.4",
     "simple-oauth2": "^4.2.0",
-    "socket.io": "^3.1.2",
+    "socket.io": "^4.0.0",
     "underscore": "^1.12.0"
   },
   "devDependencies": {},

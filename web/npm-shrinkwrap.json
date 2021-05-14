@@ -1061,9 +1061,9 @@
       }
     },
     "chessground": {
-      "version": "7.11.1",
-      "resolved": "https://registry.npmjs.org/chessground/-/chessground-7.11.1.tgz",
-      "integrity": "sha512-IwGSEZBsQlquHyudv1Y5EwlfTXrz0CEWisJuEim2W3eX07IBpYUsr0ChTD35du+Cr0x1+e6GbCLY3hVejKG7ow=="
+      "version": "7.12.0",
+      "resolved": "https://registry.npmjs.org/chessground/-/chessground-7.12.0.tgz",
+      "integrity": "sha512-MQG7c4Hsy1dCkMFFv4LTaRauVSmWF8/dukion1qLCh5pIcKyoa5onbmbglAdDXOYhBbAZVf1F289wy0DeDEBJQ=="
     },
     "chokidar": {
       "version": "1.7.0",

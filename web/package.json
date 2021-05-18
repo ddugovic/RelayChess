@@ -9,7 +9,7 @@
     "angular-route": "^1.8.2",
     "chessground": "^7.12.0",
     "ngstorage": "^0.3.11",
-    "socket.io-client": "^4.1.1"
+    "socket.io-client": "^4.1.2"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",
